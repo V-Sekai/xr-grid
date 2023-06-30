@@ -15,6 +15,3 @@ func _ready():
 		print(vp.size)
 	else:
 		print("OpenXR not initialised, please check if your headset is connected")
-
-func _on_right_hand_button_pressed(p_name):
-	print("Pressed " + str(p_name))

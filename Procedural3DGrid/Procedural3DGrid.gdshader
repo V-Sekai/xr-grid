@@ -26,7 +26,7 @@ vec3 xform(mat4 m, vec3 p, const int w){return (m * vec4(p,float(w))).xyz;}
 
 
 void handlePoint(mat4 modelToWorld, mat4 worldToView, mat4 viewToWorld, inout mat4 modelToView){
-	vec3 pos = modelToWorld[3].xyz + floor(viewToWorld[3].xyz);
+	vec3 pos = modelToWorld[3].xyz;// + floor(viewToWorld[3].xyz);
 	
 	modelToView[0].xyz = vec3(_PointRadius,0,0);
 	modelToView[1].xyz = vec3(0,_PointRadius,0);
@@ -37,7 +37,7 @@ void handlePoint(mat4 modelToWorld, mat4 worldToView, mat4 viewToWorld, inout ma
 void handleLine(vec3 normal, mat4 modelToWorld, mat4 worldToView, mat4 viewToWorld, inout mat4 modelToView){
 	float lineWidth = _PointRadius * 0.3;
 	
-	vec3 pos = modelToWorld[3].xyz + floor(viewToWorld[3].xyz);
+	vec3 pos = modelToWorld[3].xyz;// + floor(viewToWorld[3].xyz);
 	
 	normal = mat3(modelToView) * normal;
 	
@@ -48,20 +48,22 @@ void handleLine(vec3 normal, mat4 modelToWorld, mat4 worldToView, mat4 viewToWor
 }
 
 void vertex(){
+	COLOR = _Color;
+	
 	if(UV.x < 0.5){
 		handlePoint(MODEL_MATRIX, VIEW_MATRIX, INV_VIEW_MATRIX, MODELVIEW_MATRIX);
 	}
 	else{
 		handleLine(NORMAL, MODEL_MATRIX, VIEW_MATRIX, INV_VIEW_MATRIX, MODELVIEW_MATRIX);
+		COLOR.a *= .4;
 	}
 	//MODELVIEW_MATRIX[3].xyz = vec3(0,0,1);
 	
-	COLOR = _Color;
 }
 
 void fragment(){
 	ALBEDO = COLOR.rgb;
 	ALPHA = COLOR.a;
-	ALPHA *= 1.0 - smoothstep(0.5, 1.0, length(VERTEX)/4.0);
+	ALPHA *= 1.0 - smoothstep(0.5, 1.0, length(VERTEX)/8.0);
 	ALPHA *= smoothstep(0.0,.5,-VERTEX.z);
 }
