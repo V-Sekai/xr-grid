@@ -30,7 +30,7 @@ func pinchTransform(_transform:Transform3D, from_a:Vector3, from_b:Vector3, to_a
 	from_b -= from_a
 	to_b -= to_a
 	
-	_transform = _transform.translated(-from_a).scaled(Vector3(1,1,1) * to_b.dot(to_b) / from_b.dot(from_b))
+	_transform = _transform.translated(-from_a).scaled(Vector3(1,1,1) * sqrt( to_b.dot(to_b) / from_b.dot(from_b) ) )
 
 	var axis = from_b.cross(to_b)
 	var angle = from_b.angle_to(to_b)
