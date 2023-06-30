@@ -8,9 +8,11 @@ func set_grid_width(value):
 	grid_width = value
 	multimesh.instance_count = grid_width*grid_width*grid_width
 
-func _process(dt):
-	#return
-	
+func _process(delta):
+	#regenerate()
+	pass
+
+func regenerate():
 	var arr_mesh:= ArrayMesh.new()
 
 	var arrays = []
@@ -48,8 +50,8 @@ func _process(dt):
 		arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array()
 		
 		arrays[Mesh.ARRAY_VERTEX].append( Vector3(0,-0.5,0) )
-		arrays[Mesh.ARRAY_VERTEX].append( Vector3(1,-0.5,0) )
 		arrays[Mesh.ARRAY_VERTEX].append( Vector3(0,0.5,0) )
+		arrays[Mesh.ARRAY_VERTEX].append( Vector3(1,-0.5,0) )
 		arrays[Mesh.ARRAY_VERTEX].append( Vector3(1,0.5,0) )
 		for j in range(0,4):
 			arrays[Mesh.ARRAY_NORMAL].append( axes[i] )
