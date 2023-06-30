@@ -9,7 +9,7 @@ var prev_hand_left_pressed:bool
 var prev_hand_right_pressed:bool
 func _process(delta):
 	var hand_left_pressed = hand_left.is_button_pressed("grip")
-	var hand_right_pressed = hand_left.is_button_pressed("grip")
+	var hand_right_pressed = hand_right.is_button_pressed("grip")
 	
 	if prev_hand_left_pressed && prev_hand_right_pressed:
 		transform = pinchTransform(
