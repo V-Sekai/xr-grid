@@ -1,11 +1,13 @@
-[gd_scene load_steps=30 format=3 uid="uid://dj5hnpndrjq7p"]
+[gd_scene load_steps=34 format=3 uid="uid://dj5hnpndrjq7p"]
 
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail_draw_pass.gdshader" id="3_biyvx"]
 [ext_resource type="Script" path="res://XrOrigin3d.gd" id="3_p8s7d"]
 [ext_resource type="Script" path="res://xr_pinch.gd" id="4_4qf3o"]
 [ext_resource type="Script" path="res://addons/GPUTrail-main/GPUTrail3D.gd" id="6_dqij4"]
+[ext_resource type="Shader" path="res://SimpleSketcher/simple_sketch.gdshader" id="6_wgf7r"]
 [ext_resource type="PackedScene" uid="uid://ye52hc0t6bue" path="res://Procedural3DGrid/procedural_grid_3d.tscn" id="6_yejl2"]
+[ext_resource type="Script" path="res://strokes.gd" id="7_duwlg"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gj73n"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -209,6 +211,12 @@ shader_parameter/curve = SubResource("CurveTexture_m72oh")
 [sub_resource type="QuadMesh" id="QuadMesh_v1e26"]
 material = SubResource("ShaderMaterial_sw5rf")
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1r3ns"]
+render_priority = 0
+shader = ExtResource("6_wgf7r")
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_i2s0e"]
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dik2t"]
 albedo_color = Color(0.180392, 0.180392, 0.180392, 1)
 
@@ -284,6 +292,13 @@ _defaults_have_been_set = true
 script = ExtResource("4_4qf3o")
 hand_left = NodePath("../XROrigin3D/hand_left")
 hand_right = NodePath("../XROrigin3D/hand_right")
+
+[node name="strokes" type="MeshInstance3D" parent="canvas" node_paths=PackedStringArray("hand_left", "hand_right")]
+material_override = SubResource("ShaderMaterial_1r3ns")
+mesh = SubResource("ImmediateMesh_i2s0e")
+script = ExtResource("7_duwlg")
+hand_left = NodePath("../../XROrigin3D/hand_left")
+hand_right = NodePath("../../XROrigin3D/hand_right")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="canvas"]
 material_override = SubResource("StandardMaterial3D_dik2t")
