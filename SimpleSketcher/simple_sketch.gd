@@ -2,6 +2,8 @@ class_name SimpleSketch extends RefCounted
 
 var target_mesh:ImmediateMesh
 
+# TODO: fix surfaces
+
 func _init():
 	pass
 
@@ -19,22 +21,22 @@ func addLine(from:Vector3, to:Vector3, from_size:float=.01, to_size:float=.01, f
 	target_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 	
 	target_mesh.surface_set_normal(from_tangent)
-	target_mesh.surface_set_uv(Vector2(0, -1))
+	target_mesh.surface_set_uv(Vector2(0, -from_size))
 	target_mesh.surface_set_color(from_color)
 	target_mesh.surface_add_vertex(from)
 	
 	target_mesh.surface_set_normal(from_tangent)
-	target_mesh.surface_set_uv(Vector2(0, 1))
+	target_mesh.surface_set_uv(Vector2(0, from_size))
 	target_mesh.surface_set_color(from_color)
 	target_mesh.surface_add_vertex(from)
 	
 	target_mesh.surface_set_normal(to_tangent)
-	target_mesh.surface_set_uv(Vector2(0, -1))
+	target_mesh.surface_set_uv(Vector2(0, -to_size))
 	target_mesh.surface_set_color(to_color)
 	target_mesh.surface_add_vertex(to)
 	
 	target_mesh.surface_set_normal(to_tangent)
-	target_mesh.surface_set_uv(Vector2(0, 1))
+	target_mesh.surface_set_uv(Vector2(0, to_size))
 	target_mesh.surface_set_color(to_color)
 	target_mesh.surface_add_vertex(to)
 	

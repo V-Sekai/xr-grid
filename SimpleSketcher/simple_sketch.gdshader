@@ -15,5 +15,10 @@ mat4 getLineBillboard(vec3 a,vec3 b){
 
 void vertex(){
 	VERTEX = ( MODELVIEW_MATRIX * vec4(VERTEX,1) ).xyz;
-	VERTEX += UV.x * getLineBillboard(VERTEX,VERTEX+NORMAL)[0].xyz + UV.y * getLineBillboard(VERTEX,VERTEX+NORMAL)[1].xyz;
+	vec3 tangent = mat3(MODELVIEW_MATRIX) * NORMAL;
+	VERTEX += UV.x * getLineBillboard(VERTEX,VERTEX+tangent)[0].xyz + UV.y * getLineBillboard(VERTEX,VERTEX+tangent)[1].xyz;
+}
+void fragment(){
+	ALBEDO = COLOR.rgb;
+	ALPHA = COLOR.a;
 }
