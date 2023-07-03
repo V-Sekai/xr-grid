@@ -1,18 +1,28 @@
 @tool
 extends MultiMeshInstance3D
 
-@export var grid_width = 10 : set = set_grid_width
-@export var n_vertex_circle = 32
+@export var points_per_dimension:= 6 : set = set_points_per_dimension
+@export var n_vertex_circle:= 32
+@export var fade_zone:= 0.5
+@export var far_fade:= 1.0
 
-func set_grid_width(value):
-	grid_width = value
-	multimesh.instance_count = grid_width*grid_width*grid_width
+
+func set_points_per_dimension(value):
+	points_per_dimension = value
+	multimesh.instance_count = points_per_dimension*points_per_dimension*points_per_dimension
+	
+	regenerate_mesh()
 
 func _process(delta):
-	#regenerate()
-	pass
+	material_override.set_shader_parameter("_GridCenter", global_position)
+	
+	#regenerate_mesh()
+	
+func set_points_per_dimension_from_fade():
+	# hmmmm, something is not right
+	points_per_dimension = int( (fade_zone+far_fade)*2 )
 
-func regenerate():
+func regenerate_mesh():
 	var arr_mesh:= ArrayMesh.new()
 
 	var arrays = []
@@ -44,7 +54,7 @@ func regenerate():
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	
 	const axes = [Vector3(1,0,0), Vector3(0,1,0), Vector3(0,0,1)]
-	for i in range(0,3):	
+	for i in range(0,3):
 		arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array()
 		arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array()
 		arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array()
@@ -63,7 +73,7 @@ func regenerate():
 	
 	for i in range(0, multimesh.instance_count):
 		var grid_transform:= Transform3D()
-		grid_transform.origin = Vector3(i%grid_width, i/grid_width%grid_width, i/(grid_width*grid_width))
-		grid_transform.origin -= Vector3(1,1,1) * (grid_width/2-1)
+		grid_transform.origin = Vector3(i%points_per_dimension, i/points_per_dimension%points_per_dimension, i/(points_per_dimension*points_per_dimension))
+		grid_transform.origin -= Vector3(1,1,1) * (points_per_dimension/2-1)
 		
 		multimesh.set_instance_transform(i, grid_transform)

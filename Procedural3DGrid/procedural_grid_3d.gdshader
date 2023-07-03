@@ -7,11 +7,10 @@ render_mode skip_vertex_transform;
 
 uniform uint _DisplayGridLines;
 
-//uniform mat4 _CanvasToWorldMatrix;
-uniform vec3 _GridAnchorPos;
-uniform float _DistanceBetweenPoints;
+//uniform float _DistanceBetweenPoints;
 uniform float _PointRadius = .02;
-uniform uint _PointsPerDim;
+//uniform uint _PointsPerDim;
+uniform vec3 _GridCenter = vec3(0,0,0);
 
 uniform vec4 _Color : source_color = vec4(0,0,0,1);
 
@@ -40,66 +39,67 @@ float computeOpacity(mat4 worldToView, vec3 viewSpacePos, float baseOpacity)
     float opacity = baseOpacity;
     if (focus_point_distance > _FarFade)
     {
-        opacity = clamp(1.0 + (_FarFade - focus_point_distance) / _FadeZone, 0.0, 1.0) * baseOpacity;
+        opacity *= clamp(1.0 + (_FarFade - focus_point_distance) / _FadeZone, 0.0, 1.0);
     }
 
     float depth = viewSpacePos.z * -1.0;
     if (depth < _NearFade)
     {
-        opacity = clamp(-_FadeZone + depth / _NearFade, 0.0, 1.0) * baseOpacity;
+        opacity *= clamp(-_FadeZone + depth / _NearFade, 0.0, 1.0);
     }
 
     return opacity;
 }
 
-void handlePoint(mat4 modelToWorld, mat4 worldToView, mat4 viewToWorld, inout mat4 modelToView){
-	vec3 pos = modelToWorld[3].xyz;// + floor(viewToWorld[3].xyz);
-	
-	modelToView[0].xyz = vec3(_PointRadius,0,0);
-	modelToView[1].xyz = vec3(0,_PointRadius,0);
-	modelToView[2].xyz = vec3(0,0,_PointRadius);
-	modelToView[3].xyz = xform(worldToView,pos,1);
+void handlePoint(vec3 pos, mat4 worldToView, inout mat4 modelToView){
+	modelToView[0].xyz = vec3(_PointRadius, 0, 0);
+	modelToView[1].xyz = vec3(0, _PointRadius, 0);
+	modelToView[2].xyz = vec3(0, 0, _PointRadius);
+	modelToView[3].xyz = xform(worldToView, pos, 1);
 }
 
-void handleLine(vec3 normal, mat4 modelToWorld, mat4 worldToView, mat4 viewToWorld, inout mat4 modelToView){
+void handleLine(vec3 pos, vec3 normal, mat4 worldToView, inout mat4 modelToView){
 	float lineWidth = _PointRadius * 0.3;
 	
-	vec3 pos = modelToWorld[3].xyz;// + floor(viewToWorld[3].xyz);
-	pos = xform(worldToView,pos,1);
+	//vec3 pos = modelToWorld[3].xyz;// + floor(viewToWorld[3].xyz);
+	pos = xform(worldToView, pos, 1);
 	
 	normal = mat3(modelToView) * normal;
 	
 	modelToView = getLineBillboard(pos, pos+normal*2.0);
 	modelToView[1].xyz *= lineWidth;
-	/*
-	modelToView[0].xyz = normal;
-	modelToView[1].xyz = normalize( vec3(-normal.y, normal.x, 0) )*lineWidth;
-	modelToView[2].xyz = vec3(0,0,1);
-	modelToView[3].xyz = xform(worldToView,pos,1);*/
+}
+
+vec3 getGridSnapOffset(mat4 modelToWorld, vec3 world_camera_pos){
+	modelToWorld[3].xyz = _GridCenter;
+	vec3 offset = floor( xform(inverse(modelToWorld), world_camera_pos, 1) );
+	return xform(modelToWorld, offset, 0);
 }
 
 void vertex(){
 	COLOR = _Color;
+
+	vec3 world_pos = MODEL_MATRIX[3].xyz + getGridSnapOffset(MODEL_MATRIX, INV_VIEW_MATRIX[3].xyz);
 	
+	// Translate to eye space
 	mat4 eye_matrix = VIEW_MATRIX;
 	eye_matrix[3].xyz -= EYE_OFFSET;
-	
-	mat4 inv_eye_matrx = INV_VIEW_MATRIX;
-	inv_eye_matrx[3].xyz += EYE_OFFSET;
-	
 	MODELVIEW_MATRIX[3].xyz -= EYE_OFFSET;
 	
 	if(UV.x < 0.5){
-		handlePoint(MODEL_MATRIX, eye_matrix, inv_eye_matrx, MODELVIEW_MATRIX);
+		handlePoint(world_pos, eye_matrix, MODELVIEW_MATRIX);
 	}
 	else{
-		handleLine(NORMAL, MODEL_MATRIX, eye_matrix, inv_eye_matrx, MODELVIEW_MATRIX);
+		handleLine(world_pos, NORMAL, eye_matrix, MODELVIEW_MATRIX);
 		COLOR.a *= .4;
 	}
 	
+	// Translate back to camera space
+	//eye_matrix[3].xyz += EYE_OFFSET;
 	MODELVIEW_MATRIX[3].xyz += EYE_OFFSET;
 	
-	VERTEX = xform(MODELVIEW_MATRIX,VERTEX,1);
+	// Perform vertex transformation (model to view)
+	VERTEX = xform(MODELVIEW_MATRIX, VERTEX, 1);
 	
 	COLOR.a = computeOpacity(VIEW_MATRIX, VERTEX, COLOR.a);
 }
