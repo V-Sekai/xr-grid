@@ -308,3 +308,5 @@ skeleton = NodePath("../..")
 [node name="ProceduralGrid3D" parent="canvas" instance=ExtResource("6_yejl2")]
 level_color = SubResource("GradientTexture1D_nbrpf")
 FOCUS_NODE = NodePath("../../XROrigin3D/hand_right/focus")
+
+[node name="GPUParticles3D" type="GPUParticles3D" parent="."]

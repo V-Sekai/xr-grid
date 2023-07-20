@@ -1,11 +1,14 @@
 @tool
 extends MultiMeshInstance3D
 
+@export var pulse_regenerate_mesh:bool : set = set_pulse_regenerate_mesh
 @export var points_per_dimension:= 6 : set = set_points_per_dimension
 @export var n_vertex_circle:= 32
 @export var fade_zone:= 0.5
 @export var far_fade:= 1.0
 
+func set_pulse_regenerate_mesh(value):
+	regenerate_mesh()
 
 func set_points_per_dimension(value):
 	points_per_dimension = value
@@ -77,3 +80,5 @@ func regenerate_mesh():
 		grid_transform.origin -= Vector3(1,1,1) * (points_per_dimension/2-1)
 		
 		multimesh.set_instance_transform(i, grid_transform)
+	
+	print("Grid mesh has been regenerated")
