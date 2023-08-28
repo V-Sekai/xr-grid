@@ -1,11 +1,14 @@
 class_name SimpleSketch extends RefCounted
 
-var target_mesh:ImmediateMesh
+var target_mesh:ArrayMesh
 
 # TODO: fix surfaces
 
 func _init():
 	pass
+
+#func append_vec4(arr:PackedFloat32Array, v:Vector4):
+#	arr += [v.x,v.y,v.z,v.w]
 
 var prev_tangent:Vector3
 func addLine(from:Vector3, to:Vector3, from_size:float=.01, to_size:float=.01, from_color:Color=Color(0,0,0), to_color:Color=Color(0,0,0), begin_stroke:bool = false):
@@ -17,30 +20,56 @@ func addLine(from:Vector3, to:Vector3, from_size:float=.01, to_size:float=.01, f
 	if begin_stroke:
 		from_tangent = to_tangent
 	
+	
 	# Begin draw.
-	target_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+	var arrays = target_mesh.surface_get_arrays(target_mesh.get_surface_count()-1)
 	
-	target_mesh.surface_set_normal(from_tangent)
-	target_mesh.surface_set_uv(Vector2(0, -from_size))
-	target_mesh.surface_set_color(from_color)
-	target_mesh.surface_add_vertex(from)
+	arrays[ArrayMesh.ARRAY_VERTEX].append(from)
+	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([from_tangent.x, from_tangent.y, from_tangent.z, 1.0])
+	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, -from_size))
+	arrays[ArrayMesh.ARRAY_COLOR].append(from_color)
 	
-	target_mesh.surface_set_normal(from_tangent)
-	target_mesh.surface_set_uv(Vector2(0, from_size))
-	target_mesh.surface_set_color(from_color)
-	target_mesh.surface_add_vertex(from)
+	arrays[ArrayMesh.ARRAY_VERTEX].append(from)
+	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([from_tangent.x, from_tangent.y, from_tangent.z, 1.0])
+	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, from_size))
+	arrays[ArrayMesh.ARRAY_COLOR].append(from_color)
 	
-	target_mesh.surface_set_normal(to_tangent)
-	target_mesh.surface_set_uv(Vector2(0, -to_size))
-	target_mesh.surface_set_color(to_color)
-	target_mesh.surface_add_vertex(to)
+	arrays[ArrayMesh.ARRAY_VERTEX].append(to)
+	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([to_tangent.x, to_tangent.y, to_tangent.z, 1.0])
+	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, -to_size))
+	arrays[ArrayMesh.ARRAY_COLOR].append(to_color)
 	
-	target_mesh.surface_set_normal(to_tangent)
-	target_mesh.surface_set_uv(Vector2(0, to_size))
-	target_mesh.surface_set_color(to_color)
-	target_mesh.surface_add_vertex(to)
+	arrays[ArrayMesh.ARRAY_VERTEX].append(to)
+	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([to_tangent.x, to_tangent.y, to_tangent.z, 1.0])
+	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, to_size))
+	arrays[ArrayMesh.ARRAY_COLOR].append(to_color)
 	
-	# End drawing.
-	target_mesh.surface_end()
+	target_mesh.clear_surfaces()
+	target_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP,arrays)
+	
+#	target_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
+#
+#	target_mesh.surface_set_normal(from_tangent)
+#	target_mesh.surface_set_uv(Vector2(0, -from_size))
+#	target_mesh.surface_set_color(from_color)
+#	target_mesh.surface_add_vertex(from)
+#
+#	target_mesh.surface_set_normal(from_tangent)
+#	target_mesh.surface_set_uv(Vector2(0, from_size))
+#	target_mesh.surface_set_color(from_color)
+#	target_mesh.surface_add_vertex(from)
+#
+#	target_mesh.surface_set_normal(to_tangent)
+#	target_mesh.surface_set_uv(Vector2(0, -to_size))
+#	target_mesh.surface_set_color(to_color)
+#	target_mesh.surface_add_vertex(to)
+#
+#	target_mesh.surface_set_normal(to_tangent)
+#	target_mesh.surface_set_uv(Vector2(0, to_size))
+#	target_mesh.surface_set_color(to_color)
+#	target_mesh.surface_add_vertex(to)
+#
+#	# End drawing.
+#	target_mesh.surface_end()
 	
 	prev_tangent = to_tangent

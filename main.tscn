@@ -215,7 +215,7 @@ material = SubResource("ShaderMaterial_sw5rf")
 render_priority = 0
 shader = ExtResource("6_wgf7r")
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_i2s0e"]
+[sub_resource type="ArrayMesh" id="ArrayMesh_xy7d6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dik2t"]
 albedo_color = Color(0.180392, 0.180392, 0.180392, 1)
@@ -295,7 +295,7 @@ hand_right = NodePath("../XROrigin3D/hand_right")
 
 [node name="strokes" type="MeshInstance3D" parent="canvas" node_paths=PackedStringArray("hand_left", "hand_right")]
 material_override = SubResource("ShaderMaterial_1r3ns")
-mesh = SubResource("ImmediateMesh_i2s0e")
+mesh = SubResource("ArrayMesh_xy7d6")
 script = ExtResource("7_duwlg")
 hand_left = NodePath("../../XROrigin3D/hand_left")
 hand_right = NodePath("../../XROrigin3D/hand_right")
