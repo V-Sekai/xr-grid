@@ -15,7 +15,7 @@ var prev_hand_right_pressed:float
 func _process(delta):
 	var hand_left_pressed = hand_left.get_float("trigger")
 	var hand_right_pressed = hand_right.get_float("trigger")
-	var max_size = 0.1
+	var max_size = 0.01
 	
 	if not is_zero_approx(hand_left_pressed):
 		var from = to_local(prev_hand_left_transform.origin)

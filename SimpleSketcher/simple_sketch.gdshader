@@ -3,6 +3,7 @@ shader_type spatial;
 render_mode unshaded;
 render_mode skip_vertex_transform;
 render_mode cull_disabled;
+render_mode depth_draw_always;
 
 mat4 getLineBillboard(vec3 a,vec3 b){
     mat4 billboard = mat4(1);
@@ -15,7 +16,7 @@ mat4 getLineBillboard(vec3 a,vec3 b){
 
 void vertex(){
 	VERTEX = ( MODELVIEW_MATRIX * vec4(VERTEX,1) ).xyz;
-	vec3 tangent = mat3(MODELVIEW_MATRIX) * NORMAL;
+	vec3 tangent = mat3(MODELVIEW_MATRIX) * TANGENT;
 	VERTEX += UV.x * getLineBillboard(VERTEX,VERTEX+tangent)[0].xyz + UV.y * getLineBillboard(VERTEX,VERTEX+tangent)[1].xyz;
 }
 void fragment(){

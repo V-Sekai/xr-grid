@@ -23,6 +23,10 @@ func addLine(from:Vector3, to:Vector3, from_size:float=.01, to_size:float=.01, f
 	# Begin draw.
 	var arrays = []
 	arrays.resize(ArrayMesh.ARRAY_MAX)
+	arrays[ArrayMesh.ARRAY_VERTEX] = PackedVector3Array()
+	arrays[ArrayMesh.ARRAY_TANGENT] = PackedFloat32Array()
+	arrays[ArrayMesh.ARRAY_TEX_UV] = PackedVector2Array()
+	arrays[ArrayMesh.ARRAY_COLOR] = PackedColorArray()
 	
 	# Build on original mesh if possible
 	if target_mesh.get_surface_count() > 0:
