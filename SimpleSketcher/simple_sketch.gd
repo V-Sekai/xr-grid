@@ -21,7 +21,12 @@ func addLine(from:Vector3, to:Vector3, from_size:float=.01, to_size:float=.01, f
 	
 	
 	# Begin draw.
-	var arrays = target_mesh.surface_get_arrays(target_mesh.get_surface_count()-1)
+	var arrays = []
+	arrays.resize(ArrayMesh.ARRAY_MAX)
+	
+	# Build on original mesh if possible
+	if target_mesh.get_surface_count() > 0:
+		arrays = target_mesh.surface_get_arrays(0) #target_mesh.get_surface_count()-1)
 	
 	arrays[ArrayMesh.ARRAY_VERTEX].append(from)
 	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([from_tangent.x, from_tangent.y, from_tangent.z, 1.0])
