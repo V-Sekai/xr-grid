@@ -2,7 +2,6 @@ class_name SimpleSketch extends RefCounted
 
 var target_mesh:ArrayMesh
 
-# TODO: fix surfaces
 
 func _init():
 	pass
@@ -45,7 +44,7 @@ func addLine(from:Vector3, to:Vector3, from_size:float=.01, to_size:float=.01, f
 	arrays[ArrayMesh.ARRAY_COLOR].append(to_color)
 	
 	target_mesh.clear_surfaces()
-	target_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP,arrays)
+	target_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays)
 	
 #	target_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 #
