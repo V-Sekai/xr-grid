@@ -1,4 +1,4 @@
-[gd_scene load_steps=34 format=3 uid="uid://dj5hnpndrjq7p"]
+[gd_scene load_steps=35 format=3 uid="uid://dj5hnpndrjq7p"]
 
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail_draw_pass.gdshader" id="3_biyvx"]
@@ -8,6 +8,7 @@
 [ext_resource type="Shader" path="res://SimpleSketcher/simple_sketch.gdshader" id="6_wgf7r"]
 [ext_resource type="PackedScene" uid="uid://ye52hc0t6bue" path="res://Procedural3DGrid/procedural_grid_3d.tscn" id="6_yejl2"]
 [ext_resource type="Script" path="res://strokes.gd" id="7_duwlg"]
+[ext_resource type="PackedScene" uid="uid://cuikfhtqs5870" path="res://floof/Black Cat Fire Floof 2023 Perfect Sync.vrm" id="9_u6pqv"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gj73n"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -317,5 +318,7 @@ transform = Transform3D(0.456539, 0.889703, -1.88922e-08, -0.889703, 0.456539, 1
 material_override = SubResource("ShaderMaterial_1r3ns")
 mesh = SubResource("ArrayMesh_xy7d6")
 skeleton = NodePath("../..")
+
+[node name="Black Cat Fire Floof 2023 Perfect Sync" parent="canvas" instance=ExtResource("9_u6pqv")]
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
