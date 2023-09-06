@@ -310,6 +310,7 @@ FOCUS_NODE = NodePath("../../XROrigin3D/hand_right/focus")
 
 [node name="Node3D" type="Node3D" parent="canvas"]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
 
 [node name="strokes_mirror" type="MeshInstance3D" parent="canvas/Node3D"]
 transform = Transform3D(0.456539, 0.889703, -1.88922e-08, -0.889703, 0.456539, 1.154e-08, 1.88922e-08, 1.154e-08, 1, -0.16778, -0.434362, 8.91772e-08)
