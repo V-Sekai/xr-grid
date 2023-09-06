@@ -4,7 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://rs0j50y8n0gn" path="res://Procedural3DGrid/base_procedural_grid_3d.tscn" id="1_hr8ny"]
 [ext_resource type="Shader" path="res://Procedural3DGrid/procedural_grid_3d.gdshader" id="3_h18ko"]
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_i1ysb"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_o8a3x"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_h18ko")
@@ -17,7 +17,7 @@ shader_parameter/_FarFade = 0.5
 shader_parameter/_FadeZone = 0.5
 shader_parameter/_FocusPoint = Vector3(0, 0, 0)
 
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_hyl7m"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b8m88"]
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_h18ko")
@@ -35,10 +35,10 @@ script = ExtResource("1_4uxcc")
 
 [node name="BaseProceduralGrid3D" parent="." instance=ExtResource("1_hr8ny")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_i1ysb")
+material_override = SubResource("ShaderMaterial_o8a3x")
 pulse_regenerate_mesh = false
 
 [node name="BaseProceduralGrid3D2" parent="BaseProceduralGrid3D" instance=ExtResource("1_hr8ny")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
-material_override = SubResource("ShaderMaterial_hyl7m")
+material_override = SubResource("ShaderMaterial_b8m88")
 pulse_regenerate_mesh = false

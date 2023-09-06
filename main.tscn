@@ -12,6 +12,7 @@
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hf7ak"]
 shading_mode = 0
+albedo_color = Color(0.980392, 0.827451, 0.0745098, 1)
 
 [sub_resource type="SphereMesh" id="SphereMesh_u42fx"]
 radius = 1.0
@@ -28,7 +29,7 @@ point_count = 2
 curve = SubResource("Curve_hqx6l")
 
 [sub_resource type="Gradient" id="Gradient_y8ofu"]
-colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+colors = PackedColorArray(0.980392, 0.827451, 0.0745098, 1, 1, 1, 1, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_g1tsk"]
 gradient = SubResource("Gradient_y8ofu")
@@ -47,7 +48,7 @@ material = SubResource("ShaderMaterial_tj13k")
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_spxwv"]
 shading_mode = 0
-albedo_color = Color(0, 0, 0, 1)
+albedo_color = Color(0.0745098, 0.101961, 0.643137, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_dhual"]
 shader = ExtResource("2_rl0re")
@@ -182,7 +183,7 @@ void fragment(){
 }"
 
 [sub_resource type="Gradient" id="Gradient_x6w7l"]
-colors = PackedColorArray(0, 0, 0, 1, 0, 0, 0, 0)
+colors = PackedColorArray(0.0745098, 0.101961, 0.643137, 1, 0, 0, 0, 0)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_24r4x"]
 gradient = SubResource("Gradient_x6w7l")
