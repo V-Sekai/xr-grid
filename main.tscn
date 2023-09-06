@@ -10,19 +10,6 @@
 [ext_resource type="Script" path="res://strokes.gd" id="7_duwlg"]
 [ext_resource type="PackedScene" uid="uid://cuikfhtqs5870" path="res://floof/Black Cat Fire Floof 2023 Perfect Sync.vrm" id="9_u6pqv"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gj73n"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-
-[sub_resource type="Sky" id="Sky_w1won"]
-sky_material = SubResource("ProceduralSkyMaterial_gj73n")
-
-[sub_resource type="Environment" id="Environment_6juhc"]
-background_mode = 1
-background_color = Color(0.972549, 0.976471, 0.92549, 1)
-background_energy_multiplier = 0.5
-sky = SubResource("Sky_w1won")
-
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hf7ak"]
 shading_mode = 0
 
@@ -229,14 +216,20 @@ colors = PackedColorArray(0, 0.388235, 0.556863, 0.513726, 1, 0.649035, 0.630434
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_nbrpf"]
 gradient = SubResource("Gradient_dqq8l")
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gj73n"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_w1won"]
+sky_material = SubResource("ProceduralSkyMaterial_gj73n")
+
+[sub_resource type="Environment" id="Environment_6juhc"]
+background_mode = 1
+background_color = Color(0.972549, 0.976471, 0.92549, 1)
+background_energy_multiplier = 0.5
+sky = SubResource("Sky_w1won")
+
 [node name="main" type="Node3D"]
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
-shadow_enabled = true
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_6juhc")
 
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 script = ExtResource("3_p8s7d")
@@ -320,5 +313,12 @@ mesh = SubResource("ArrayMesh_xy7d6")
 skeleton = NodePath("../..")
 
 [node name="Black Cat Fire Floof 2023 Perfect Sync" parent="canvas" instance=ExtResource("9_u6pqv")]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="canvas"]
+transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="canvas"]
+environment = SubResource("Environment_6juhc")
 
 [node name="GPUParticles3D" type="GPUParticles3D" parent="."]
