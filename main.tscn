@@ -18,9 +18,9 @@ sky_material = SubResource("ProceduralSkyMaterial_gj73n")
 
 [sub_resource type="Environment" id="Environment_6juhc"]
 background_mode = 1
-background_color = Color(0.647059, 0.647059, 0.647059, 1)
+background_color = Color(0.972549, 0.976471, 0.92549, 1)
+background_energy_multiplier = 0.5
 sky = SubResource("Sky_w1won")
-glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hf7ak"]
 shading_mode = 0
@@ -223,8 +223,8 @@ albedo_color = Color(0.180392, 0.180392, 0.180392, 1)
 [sub_resource type="PlaneMesh" id="PlaneMesh_skpai"]
 
 [sub_resource type="Gradient" id="Gradient_dqq8l"]
-offsets = PackedFloat32Array(0, 0.539295, 1)
-colors = PackedColorArray(1, 0, 0, 1, 0.470588, 0.8, 1, 0.513726, 0, 0, 0, 1)
+offsets = PackedFloat32Array(0, 0.539301, 1)
+colors = PackedColorArray(1, 0.649035, 0.630434, 0.513726, 0.470588, 0.8, 1, 0.513726, 0.223529, 0.243137, 0.439216, 0.560784)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_nbrpf"]
 gradient = SubResource("Gradient_dqq8l")
