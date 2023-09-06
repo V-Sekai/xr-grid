@@ -17,6 +17,8 @@ mat4 getLineBillboard(vec3 a,vec3 b){
 void vertex(){
 	VERTEX = ( MODELVIEW_MATRIX * vec4(VERTEX,1) ).xyz;
 	vec3 tangent = mat3(MODELVIEW_MATRIX) * TANGENT;
+	
+	UV *= length(MODELVIEW_MATRIX[0].xyz);
 	VERTEX += UV.x * getLineBillboard(VERTEX,VERTEX+tangent)[0].xyz + UV.y * getLineBillboard(VERTEX,VERTEX+tangent)[1].xyz;
 }
 void fragment(){
