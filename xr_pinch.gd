@@ -8,8 +8,8 @@ var prev_hand_right_transform:Transform3D
 var prev_hand_left_pressed:bool
 var prev_hand_right_pressed:bool
 func _process(delta):
-	var hand_left_pressed = hand_left.is_button_pressed("grip_click")
-	var hand_right_pressed = hand_right.is_button_pressed("grip_click")
+	var hand_left_pressed = hand_left.get_float("grip_force") > 0.05
+	var hand_right_pressed = hand_right.get_float("grip_force") > 0.05
 	
 	if prev_hand_left_pressed && prev_hand_right_pressed:
 		transform = pinchTransform(
