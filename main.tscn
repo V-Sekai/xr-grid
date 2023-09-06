@@ -211,7 +211,7 @@ albedo_color = Color(0.180392, 0.180392, 0.180392, 1)
 [sub_resource type="PlaneMesh" id="PlaneMesh_skpai"]
 
 [sub_resource type="Gradient" id="Gradient_dqq8l"]
-colors = PackedColorArray(0.482353, 0.701961, 0.913725, 1, 1, 0.65098, 0.631373, 1)
+colors = PackedColorArray(0, 0.388235, 0.556863, 0.513726, 1, 0.649035, 0.630434, 0.513726)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_nbrpf"]
 gradient = SubResource("Gradient_dqq8l")
