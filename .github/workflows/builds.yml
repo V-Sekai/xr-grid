@@ -234,6 +234,9 @@ jobs:
           draft: false
           prerelease: false
 
+      - name: List files in workspace
+        run: ls -R
+
       - name: Upload Release Assets
         uses: actions/github-script@v6
         with:
@@ -241,7 +244,7 @@ jobs:
           script: |
             const fs = require('fs');
             const path = require('path');
-            const artifacts = ['xr_grid_shader_windows_x86_64.zip', 'xr_grid_shader_linux_x86_64.zip'];
+            const artifacts = ['xr_grid_shader_windows_x86_64/xr_grid_shader_windows_x86_64.zip', 'xr_grid_shader_linux_x86_64/xr_grid_shader_linux_x86_64.zip'];
             for (const artifact of artifacts) {
               const filePath = path.join(process.env.GITHUB_WORKSPACE, artifact);
               if (fs.existsSync(filePath)) {
