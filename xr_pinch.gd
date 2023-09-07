@@ -1,12 +1,14 @@
 extends Node3D
 
-@export var hand_left:XRController3D
-@export var hand_right:XRController3D
+@export var hand_left: XRController3D = null
+@export var hand_right: XRController3D = null
 
-var prev_hand_left_transform:Transform3D
-var prev_hand_right_transform:Transform3D
-var prev_hand_left_pressed:bool
-var prev_hand_right_pressed:bool
+var prev_hand_left_transform: Transform3D
+var prev_hand_right_transform: Transform3D
+var prev_hand_left_pressed: bool = false
+var prev_hand_right_pressed: bool = false
+
+
 func _process(delta):
 	var hand_left_pressed = hand_left.get_float("grip_force") > 0.05
 	var hand_right_pressed = hand_right.get_float("grip_force") > 0.05
@@ -25,6 +27,7 @@ func _process(delta):
 	prev_hand_right_transform = hand_right.transform
 	prev_hand_left_pressed = hand_left_pressed
 	prev_hand_right_pressed = hand_right_pressed
+
 
 func pinchTransform(_transform:Transform3D, from_a:Vector3, from_b:Vector3, to_a:Vector3, to_b:Vector3) -> Transform3D:
 	from_b -= from_a
