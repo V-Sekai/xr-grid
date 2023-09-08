@@ -20,8 +20,13 @@ void vertex(){
 	
 	UV *= length(MODELVIEW_MATRIX[0].xyz);
 	VERTEX += UV.x * getLineBillboard(VERTEX,VERTEX+tangent)[0].xyz + UV.y * getLineBillboard(VERTEX,VERTEX+tangent)[1].xyz;
+
+	UV.y = normalize(UV.y);
 }
 void fragment(){
 	ALBEDO = COLOR.rgb;
 	ALPHA = COLOR.a;
+	
+	// Anti-aliasing
+	ALPHA *= clamp( (1.0-abs(UV.y))/fwidth(UV.y), 0.0, 1.0);
 }
