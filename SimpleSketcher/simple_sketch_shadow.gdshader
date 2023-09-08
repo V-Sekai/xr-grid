@@ -20,7 +20,7 @@ void vertex(){
 	
 	float m = .4;
 	VERTEX.x += VERTEX.y * m;
-	tangent.x += m;
+	tangent.x += tangent.y * m;
 	
 	UV *= length(MODEL_MATRIX[0].xyz);
 	VERTEX += UV.x * tangent + UV.y * normalize(vec3(-tangent.y, 0, tangent.z));
