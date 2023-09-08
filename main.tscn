@@ -247,6 +247,7 @@ mesh = SubResource("SphereMesh_u42fx")
 skeleton = NodePath("../../hand_right")
 
 [node name="GPUTrail3D" type="GPUParticles3D" parent="XROrigin3D/hand_left/MeshInstance3D"]
+visible = false
 lifetime = 8.0
 explosiveness = 1.0
 fixed_fps = 0
@@ -270,6 +271,7 @@ material_override = SubResource("StandardMaterial3D_spxwv")
 mesh = SubResource("SphereMesh_u42fx")
 
 [node name="GPUTrail3D3" type="GPUParticles3D" parent="XROrigin3D/hand_right/MeshInstance3D"]
+visible = false
 lifetime = 8.0
 explosiveness = 1.0
 fixed_fps = 0
