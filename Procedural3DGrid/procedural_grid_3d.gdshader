@@ -88,10 +88,14 @@ void vertex(){
 	
 	if(UV.x < 0.5){
 		handlePoint(world_pos, eye_matrix, MODELVIEW_MATRIX);
+		
+		UV.x = dot(VERTEX,VERTEX);
 	}
 	else{
 		handleLine(world_pos, NORMAL, eye_matrix, MODELVIEW_MATRIX);
 		COLOR.a *= .4;
+		
+		UV.x = VERTEX.y * 2.0;
 	}
 	
 	// Translate back to camera space
@@ -107,4 +111,7 @@ void vertex(){
 void fragment(){
 	ALBEDO = COLOR.rgb;
 	ALPHA = COLOR.a;
+	
+	// Anti-aliasing
+	ALPHA *= clamp( (1.0-abs(UV.x))/fwidth(UV.x) ,0.0, 1.0);
 }
