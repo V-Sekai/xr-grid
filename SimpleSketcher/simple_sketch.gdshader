@@ -3,7 +3,7 @@ shader_type spatial;
 render_mode unshaded;
 render_mode skip_vertex_transform;
 render_mode cull_disabled;
-render_mode depth_draw_always;
+//render_mode depth_draw_always;
 
 mat4 getLineBillboard(vec3 a,vec3 b){
     mat4 billboard = mat4(1);

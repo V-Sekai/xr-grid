@@ -1,4 +1,4 @@
-@tool
+#@tool
 class_name SketchTool extends Node3D
 
 @export var CANVAS: NodePath
@@ -12,7 +12,7 @@ class_name SketchTool extends Node3D
 func _ready():
 	assert(canvas != null)
 	
-	simple_sketch.target_mesh = canvas.get_child(0).mesh
+	simple_sketch.target_mesh = canvas.get_node("strokes").mesh
 
 var prev_active = false
 func _process(delta):

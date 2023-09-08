@@ -202,12 +202,6 @@ shader_parameter/curve = SubResource("CurveTexture_m72oh")
 [sub_resource type="QuadMesh" id="QuadMesh_v1e26"]
 material = SubResource("ShaderMaterial_sw5rf")
 
-[sub_resource type="Gradient" id="Gradient_dqq8l"]
-colors = PackedColorArray(0, 0.388235, 0.556863, 1, 1, 0.65098, 0.631373, 1)
-
-[sub_resource type="GradientTexture1D" id="GradientTexture1D_nbrpf"]
-gradient = SubResource("Gradient_dqq8l")
-
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_1r3ns"]
 render_priority = 0
 shader = ExtResource("6_wgf7r")
@@ -224,6 +218,12 @@ albedo_color = Color(0.180392, 0.180392, 0.180392, 1)
 [sub_resource type="PlaneMesh" id="PlaneMesh_skpai"]
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_dpjv4"]
+
+[sub_resource type="Gradient" id="Gradient_dqq8l"]
+colors = PackedColorArray(0, 0.388235, 0.556863, 1, 1, 0.65098, 0.631373, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_nbrpf"]
+gradient = SubResource("Gradient_dqq8l")
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_gj73n"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -250,7 +250,6 @@ tracker = &"left_hand"
 script = ExtResource("2_bpl2v")
 
 [node name="SketchTool" type="Node3D" parent="XROrigin3D/hand_left"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.4561, 0.153116, 2.62761)
 script = ExtResource("5_uqwsl")
 CANVAS = NodePath("../../../canvas")
 color = Color(0.980392, 0.827451, 0.0745098, 1)
@@ -304,6 +303,7 @@ billboard = true
 _defaults_have_been_set = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="XROrigin3D"]
+visible = false
 
 [node name="Button" type="Button" parent="XROrigin3D/CanvasLayer"]
 anchors_preset = 15
@@ -317,10 +317,6 @@ text = "Enter VR"
 script = ExtResource("4_4qf3o")
 hand_left = NodePath("../XROrigin3D/hand_left")
 hand_right = NodePath("../XROrigin3D/hand_right")
-
-[node name="ProceduralGrid3D" parent="canvas" instance=ExtResource("6_yejl2")]
-level_color = SubResource("GradientTexture1D_nbrpf")
-FOCUS_NODE = NodePath("../../XROrigin3D/hand_right/focus")
 
 [node name="strokes" type="MeshInstance3D" parent="canvas"]
 material_override = SubResource("ShaderMaterial_1r3ns")
@@ -339,19 +335,18 @@ skeleton = NodePath("../..")
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
 [node name="strokes_mirror" type="MeshInstance3D" parent="canvas/Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_1r3ns")
 mesh = SubResource("ArrayMesh_dpjv4")
 skeleton = NodePath("../..")
 
 [node name="Black Cat Fire Floof 2023 Perfect Sync" parent="canvas" instance=ExtResource("9_u6pqv")]
 
+[node name="ProceduralGrid3D" parent="canvas" instance=ExtResource("6_yejl2")]
+level_color = SubResource("GradientTexture1D_nbrpf")
+FOCUS_NODE = NodePath("../../XROrigin3D/hand_right/focus")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="canvas"]
 transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.75, -0.43301, 0, 0, 0)
-shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="canvas"]
 environment = SubResource("Environment_6juhc")
-
-[node name="GPUParticles3D" type="GPUParticles3D" parent="."]
-visible = false

@@ -1,4 +1,4 @@
-@tool
+#@tool
 class_name SimpleSketch extends RefCounted
 
 var target_mesh:ArrayMesh
@@ -11,7 +11,6 @@ var prev_point
 var prev_size
 var prev_color
 func stroke_add(point:Vector3, size:float=.01, color:Color=Color(0,0,0)):
-	
 	if is_beginning:
 		addLine(point, point, size, size, color, color, true)
 		is_beginning = false
@@ -23,6 +22,7 @@ func stroke_add(point:Vector3, size:float=.01, color:Color=Color(0,0,0)):
 	prev_color = color
 
 func stroke_end():
+	is_beginning = false
 	pass
 
 var prev_tangent:Vector3

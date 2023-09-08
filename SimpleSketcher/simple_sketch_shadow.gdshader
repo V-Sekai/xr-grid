@@ -14,20 +14,27 @@ mat4 getLineBillboard(vec3 a,vec3 b){
     return billboard;
 }
 
+varying vec3 model_pos;
 void vertex(){
-	VERTEX = ( MODEL_MATRIX * vec4(VERTEX,1) ).xyz;
-	vec3 tangent = mat3(MODELVIEW_MATRIX) * TANGENT;
+	//VERTEX = ( MODEL_MATRIX * vec4(VERTEX,1) ).xyz;
+	vec3 tangent = TANGENT;
 	
-	float m = .4;
+	float m = .7;
 	VERTEX.x += VERTEX.y * m;
 	tangent.x += tangent.y * m;
 	
-	UV *= length(MODEL_MATRIX[0].xyz);
-	VERTEX += UV.x * tangent + UV.y * normalize(vec3(-tangent.y, 0, tangent.z));
+	UV *= 1.0;//length(MODEL_MATRIX[0].xyz);
+	VERTEX += UV.x * tangent + UV.y * normalize(vec3(-tangent.z, 0, tangent.x));
+
+	model_pos = VERTEX;
 
 	VERTEX.y = 0.001;
+	
+	VERTEX = ( MODELVIEW_MATRIX * vec4(VERTEX,1) ).xyz;
 }
 void fragment(){
 	ALBEDO = vec3(0.02);
 	ALPHA = COLOR.a;
+	
+	if(model_pos.y < 0.0) discard;
 }
