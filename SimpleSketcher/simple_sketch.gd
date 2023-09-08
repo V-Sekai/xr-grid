@@ -1,13 +1,29 @@
+@tool
 class_name SimpleSketch extends RefCounted
 
 var target_mesh:ArrayMesh
 
+var is_beginning = false
+func stroke_begin():
+	is_beginning = true
 
-func _init():
+var prev_point
+var prev_size
+var prev_color
+func stroke_add(point:Vector3, size:float=.01, color:Color=Color(0,0,0)):
+	
+	if is_beginning:
+		addLine(point, point, size, size, color, color, true)
+		is_beginning = false
+	else:
+		addLine(prev_point, point, prev_size, size, prev_color, color)
+	
+	prev_point = point
+	prev_size = size
+	prev_color = color
+
+func stroke_end():
 	pass
-
-#func append_vec4(arr:PackedFloat32Array, v:Vector4):
-#	arr += [v.x,v.y,v.z,v.w]
 
 var prev_tangent:Vector3
 func addLine(from:Vector3, to:Vector3, from_size:float=.01, to_size:float=.01, from_color:Color=Color(0,0,0), to_color:Color=Color(0,0,0), begin_stroke:bool = false):

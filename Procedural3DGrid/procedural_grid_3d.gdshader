@@ -113,5 +113,5 @@ void fragment(){
 	ALPHA = COLOR.a;
 	
 	// Anti-aliasing
-	ALPHA *= clamp( (1.0-abs(UV.x))/fwidth(UV.x) ,0.0, 1.0);
+	ALPHA *= clamp( (1.0-abs(UV.x))/fwidth(UV.x), 0.0, 1.0);
 }
