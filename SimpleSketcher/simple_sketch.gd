@@ -48,28 +48,47 @@ func addLine(from:Vector3, to:Vector3, from_size:float=.01, to_size:float=.01, f
 	if target_mesh.get_surface_count() > 0:
 		arrays = target_mesh.surface_get_arrays(0) #target_mesh.get_surface_count()-1)
 	
+	# A
 	arrays[ArrayMesh.ARRAY_VERTEX].append(from)
 	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([from_tangent.x, from_tangent.y, from_tangent.z, 1.0])
 	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, -from_size))
 	arrays[ArrayMesh.ARRAY_COLOR].append(from_color)
 	
+	# B
 	arrays[ArrayMesh.ARRAY_VERTEX].append(from)
 	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([from_tangent.x, from_tangent.y, from_tangent.z, 1.0])
 	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, from_size))
 	arrays[ArrayMesh.ARRAY_COLOR].append(from_color)
 	
+	# D
 	arrays[ArrayMesh.ARRAY_VERTEX].append(to)
 	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([to_tangent.x, to_tangent.y, to_tangent.z, 1.0])
-	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, -to_size))
+	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, to_size))
 	arrays[ArrayMesh.ARRAY_COLOR].append(to_color)
+
 	
+	
+	# A
+	arrays[ArrayMesh.ARRAY_VERTEX].append(from)
+	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([from_tangent.x, from_tangent.y, from_tangent.z, 1.0])
+	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, -from_size))
+	arrays[ArrayMesh.ARRAY_COLOR].append(from_color)
+	
+	# D
 	arrays[ArrayMesh.ARRAY_VERTEX].append(to)
 	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([to_tangent.x, to_tangent.y, to_tangent.z, 1.0])
 	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, to_size))
 	arrays[ArrayMesh.ARRAY_COLOR].append(to_color)
 	
+	# C
+	arrays[ArrayMesh.ARRAY_VERTEX].append(to)
+	arrays[ArrayMesh.ARRAY_TANGENT] += PackedFloat32Array([to_tangent.x, to_tangent.y, to_tangent.z, 1.0])
+	arrays[ArrayMesh.ARRAY_TEX_UV].append(Vector2(0, -to_size))
+	arrays[ArrayMesh.ARRAY_COLOR].append(to_color)
+
+	
 	target_mesh.clear_surfaces()
-	target_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLE_STRIP, arrays)
+	target_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 	
 #	target_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
 #
