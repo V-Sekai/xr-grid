@@ -11,7 +11,7 @@ var prev_hand_transform: Transform3D
 var prev_hand_pressed: float
 
 
-func _process(delta) -> void:
+func _process(_delta: float) -> void:
 	var hand_pressed: float = get_float("trigger")
 	var max_size: float = 0.01
 

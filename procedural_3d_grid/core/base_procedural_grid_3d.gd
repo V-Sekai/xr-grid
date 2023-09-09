@@ -25,7 +25,7 @@ func set_points_per_dimension(value: int):
 	regenerate_mesh()
 
 
-func _process(delta: float):
+func _process(_delta: float):
 	material_override.set_shader_parameter("_GridCenter", global_position)
 
 

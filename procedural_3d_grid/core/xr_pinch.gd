@@ -14,7 +14,7 @@ var prev_hand_left_pressed: bool = false
 var prev_hand_right_pressed: bool = false
 
 
-func _process(delta) -> void:
+func _process(_delta: float) -> void:
 	var hand_left_pressed = hand_left.get_float("grip") > 0.05
 	var hand_right_pressed = hand_right.get_float("grip") > 0.05
 

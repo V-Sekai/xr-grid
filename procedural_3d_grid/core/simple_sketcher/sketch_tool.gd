@@ -25,7 +25,7 @@ func _ready() -> void:
 var prev_active: bool = false
 
 
-func _process(delta) -> void:
+func _process(_delta: float) -> void:
 	if active and not prev_active:
 		simple_sketch.stroke_begin()
 
