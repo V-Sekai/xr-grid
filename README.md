@@ -12,10 +12,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tbody>
-    <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://chibifire.com"><img src="https://avatars.githubusercontent.com/u/32321?v=4?s=100" width="100px;" alt="K. S. Ernest (iFire) Lee"/><br /><sub><b>K. S. Ernest (iFire) Lee</b></sub></a><br /><a href="https://github.com/V-Sekai/V-Sekai.xr-grid/commits?author=fire" title="Code">💻</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://celyk.github.io/website/"><img src="https://avatars.githubusercontent.com/u/50609684?v=4?s=100" width="100px;" alt="celyk"/><br /><sub><b>celyk</b></sub></a><br /><a href="#design-celyk" title="Design">🎨</a> <a href="https://github.com/V-Sekai/V-Sekai.xr-grid/commits?author=celyk" title="Code">💻</a></td>
-    </tr>
+	<tr>
+	  <td align="center" valign="top" width="14.28%"><a href="https://chibifire.com"><img src="https://avatars.githubusercontent.com/u/32321?v=4?s=100" width="100px;" alt="K. S. Ernest (iFire) Lee"/><br /><sub><b>K. S. Ernest (iFire) Lee</b></sub></a><br /><a href="https://github.com/V-Sekai/V-Sekai.xr-grid/commits?author=fire" title="Code">💻</a></td>
+	  <td align="center" valign="top" width="14.28%"><a href="https://celyk.github.io/website/"><img src="https://avatars.githubusercontent.com/u/50609684?v=4?s=100" width="100px;" alt="celyk"/><br /><sub><b>celyk</b></sub></a><br /><a href="#design-celyk" title="Design">🎨</a> <a href="https://github.com/V-Sekai/V-Sekai.xr-grid/commits?author=celyk" title="Code">💻</a></td>
+	</tr>
   </tbody>
 </table>
 
