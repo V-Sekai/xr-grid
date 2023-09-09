@@ -15,6 +15,16 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "celyk",
+      "name": "celyk",
+      "avatar_url": "https://avatars.githubusercontent.com/u/50609684?v=4",
+      "profile": "https://celyk.github.io/website/",
+      "contributions": [
+        "design",
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
