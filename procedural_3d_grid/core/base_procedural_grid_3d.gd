@@ -88,5 +88,4 @@ func regenerate_mesh():
 		grid_transform.origin -= Vector3(1, 1, 1) * (points_per_dimension / 2 - 1)
 
 		multimesh.set_instance_transform(i, grid_transform)
-
-	print("Grid mesh has been regenerated")
+	print_verbose("Grid mesh has been regenerated")

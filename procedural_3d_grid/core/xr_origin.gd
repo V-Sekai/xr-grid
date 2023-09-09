@@ -15,11 +15,11 @@ func _ready() -> void:
 	# enabled it in project settings!
 	interface = XRServer.find_interface("OpenXR")
 	if interface and interface.is_initialized():
-		print("OpenXR initialised successfully")
+		print_verbose("OpenXR initialised successfully")
 
 		var vp: Viewport = get_viewport()
 		vp.use_xr = true
-		print(vp.size)
+		print_verbose(vp.size)
 		return
 
 	# We assume this node has a button as a child.
