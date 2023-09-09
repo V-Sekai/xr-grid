@@ -10,24 +10,41 @@ extends Node3D
 
 var prev_hand_left_transform: Transform3D
 var prev_hand_right_transform: Transform3D
-var prev_hand_left_pressed: bool = false
-var prev_hand_right_pressed: bool = false
+var prev_hand_left_pressed: float = 0
+var prev_hand_right_pressed: float = 0
 
+var hand_left_force_decayed: float = 0
+var hand_right_force_decayed: float = 0
+
+var decay_factor: float = 0.95
+var lerp_factor: float = 0.6
+var smooth_factor: float = 0.9
 
 func _process(_delta: float) -> void:
-	var hand_left_pressed: bool = hand_left.get_float("grip_force") > 0
-	var hand_right_pressed: bool = hand_right.get_float("grip_force") > 0
-	if prev_hand_left_pressed && prev_hand_right_pressed:
-		transform = pinch_transform(transform, prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
-	elif prev_hand_left_pressed:
-		transform = hand_left.transform * prev_hand_left_transform.affine_inverse() * transform
-	elif prev_hand_right_pressed:
-		transform = hand_right.transform * prev_hand_right_transform.affine_inverse() * transform
+	var hand_left_force: float = hand_left.get_float("grip_force")
+	var hand_right_force: float = hand_right.get_float("grip_force")
+	var force_trigger: float = 0.0
+	
+	hand_left_force_decayed = hand_left_force * decay_factor
+	hand_right_force_decayed = hand_right_force * decay_factor
+
+	var target_transform: Transform3D
+
+	if prev_hand_left_pressed > force_trigger && prev_hand_right_pressed > force_trigger:
+		target_transform = pinch_transform(transform, prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
+	elif prev_hand_left_pressed > force_trigger:
+		target_transform = hand_left.transform * prev_hand_left_transform.affine_inverse() * transform
+	elif prev_hand_right_pressed > force_trigger:
+		target_transform = hand_right.transform * prev_hand_right_transform.affine_inverse() * transform
+	else:
+		target_transform = transform
+
+	transform = transform.interpolate_with(target_transform, lerp_factor * smooth_factor)
 
 	prev_hand_left_transform = hand_left.transform
 	prev_hand_right_transform = hand_right.transform
-	prev_hand_left_pressed = hand_left_pressed
-	prev_hand_right_pressed = hand_right_pressed
+	prev_hand_left_pressed = hand_left_force_decayed
+	prev_hand_right_pressed = hand_right_force_decayed
 
 
 func pinch_transform(_transform: Transform3D, from_a: Vector3, from_b: Vector3, to_a: Vector3, to_b: Vector3) -> Transform3D:
