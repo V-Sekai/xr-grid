@@ -15,9 +15,8 @@ var prev_hand_right_pressed: bool = false
 
 
 func _process(_delta: float) -> void:
-	var hand_left_pressed = hand_left.get_float("grip") > 0.05
-	var hand_right_pressed = hand_right.get_float("grip") > 0.05
-
+	var hand_left_pressed: bool = hand_left.get_float("grip_force") > 0
+	var hand_right_pressed: bool = hand_right.get_float("grip_force") > 0
 	if prev_hand_left_pressed && prev_hand_right_pressed:
 		transform = pinch_transform(transform, prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
 	elif prev_hand_left_pressed:
