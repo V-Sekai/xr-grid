@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://dj5hnpndrjq7p"]
+[gd_scene load_steps=39 format=3 uid="uid://bg6gj8x7d3mrl"]
 
 [ext_resource type="Script" path="res://procedural_3d_grid/core/hand.gd" id="2_bpl2v"]
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
