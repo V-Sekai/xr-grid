@@ -312,6 +312,7 @@ material_override = SubResource("ShaderMaterial_1r3ns")
 mesh = SubResource("ArrayMesh_df4c5")
 
 [node name="strokes_shadow" type="MeshInstance3D" parent="canvas"]
+visible = false
 material_override = SubResource("ShaderMaterial_4t5i7")
 mesh = SubResource("ArrayMesh_df4c5")
 
