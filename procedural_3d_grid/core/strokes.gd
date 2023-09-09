@@ -11,7 +11,7 @@ extends MeshInstance3D
 @onready var simple_sketch = SimpleSketch.new()
 
 
-func _ready():
+func _ready() -> void:
 	simple_sketch.target_mesh = mesh
 
 
@@ -21,7 +21,7 @@ var prev_hand_left_pressed: float
 var prev_hand_right_pressed: float
 
 
-func _process(delta):
+func _process(delta) -> void:
 	var hand_left_pressed = hand_left.get_float("trigger")
 	var hand_right_pressed = hand_right.get_float("trigger")
 	var max_size = 0.01

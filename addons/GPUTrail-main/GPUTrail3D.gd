@@ -66,11 +66,11 @@ const _DEFAULT_CURVE = "defaults/curve.tres"
 var _defaults_have_been_set = false
 
 
-func _get_property_list():
+func _get_property_list() -> Array:
 	return [{"name": "_defaults_have_been_set", "type": TYPE_BOOL, "usage": PROPERTY_USAGE_NO_EDITOR}]
 
 
-func _ready():
+func _ready() -> void:
 	if not _defaults_have_been_set:
 		_defaults_have_been_set = true
 
@@ -92,7 +92,7 @@ func _ready():
 		draw_pass_1.material.resource_local_to_scene = true
 
 
-func _set_length(value):
+func _set_length(value) -> void:
 	length = value
 
 	if _defaults_have_been_set:
@@ -102,7 +102,7 @@ func _set_length(value):
 	restart()
 
 
-func _set_texture(value):
+func _set_texture(value) -> void:
 	texture = value
 	if value:
 		draw_pass_1.material.set_shader_parameter("tex", texture)
@@ -110,12 +110,12 @@ func _set_texture(value):
 		draw_pass_1.material.set_shader_parameter("tex", preload(_DEFAULT_TEXTURE))
 
 
-func _set_color_ramp(value):
+func _set_color_ramp(value) -> void:
 	color_ramp = value
 	draw_pass_1.material.set_shader_parameter("color_ramp", color_ramp)
 
 
-func _set_curve(value):
+func _set_curve(value) -> void:
 	curve = value
 	if value:
 		draw_pass_1.material.set_shader_parameter("curve", curve)
@@ -123,19 +123,19 @@ func _set_curve(value):
 		draw_pass_1.material.set_shader_parameter("curve", preload(_DEFAULT_CURVE))
 
 
-func _set_vertical_texture(value):
+func _set_vertical_texture(value) -> void:
 	vertical_texture = value
 	_flags = _set_flag(_flags, 0, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-func _set_use_red_as_alpha(value):
+func _set_use_red_as_alpha(value) -> void:
 	use_red_as_alpha = value
 	_flags = _set_flag(_flags, 1, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-func _set_billboard(value):
+func _set_billboard(value) -> void:
 	billboard = value
 	_flags = _set_flag(_flags, 2, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
@@ -145,19 +145,19 @@ func _set_billboard(value):
 	restart()
 
 
-func _set_dewiggle(value):
+func _set_dewiggle(value) -> void:
 	dewiggle = value
 	_flags = _set_flag(_flags, 3, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-func _set_snap_to_transform(value):
+func _set_snap_to_transform(value) -> void:
 	snap_to_transform = value
 	_flags = _set_flag(_flags, 4, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-func _set_clip_overlaps(value):
+func _set_clip_overlaps(value) -> void:
 	clip_overlaps = value
 	_flags = _set_flag(_flags, 5, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
@@ -167,7 +167,7 @@ func _set_clip_overlaps(value):
 @onready var _billboard_transform: Transform3D = global_transform
 
 
-func _process(delta):
+func _process(delta) -> void:
 	if snap_to_transform:
 		draw_pass_1.material.set_shader_parameter("emmission_transform", global_transform)
 
@@ -185,7 +185,7 @@ func _process(delta):
 	_old_pos = global_position
 
 
-func _update_billboard_transform(tangent):
+func _update_billboard_transform(tangent) -> void:
 	_billboard_transform = global_transform
 	var p = _billboard_transform.basis[1]
 	var x = tangent
@@ -200,5 +200,5 @@ func _update_billboard_transform(tangent):
 var _flags = 0
 
 
-func _set_flag(i, idx: int, value: bool):
+func _set_flag(i, idx: int, value: bool) -> int:
 	return (i & ~(1 << idx)) | (int(value) << idx)

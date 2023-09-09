@@ -9,7 +9,7 @@ var interface: XRInterface = null
 var vr_supported = false
 
 
-func _ready():
+func _ready() -> void:
 	# Find our interface and check if it was successfully initialised.
 	# Note that Godot should initialise this automatically IF you've
 	# enabled it in project settings!
@@ -41,12 +41,12 @@ func _ready():
 		interface.is_session_supported("immersive-vr")
 
 
-func _webxr_session_supported(session_mode, supported):
+func _webxr_session_supported(session_mode, supported) -> void:
 	if session_mode == "immersive-vr":
 		vr_supported = supported
 
 
-func _on_button_pressed():
+func _on_button_pressed() -> void:
 	if not vr_supported:
 		OS.alert("Your browser doesn't support VR")
 		return
@@ -75,7 +75,7 @@ func _on_button_pressed():
 		return
 
 
-func _webxr_session_started():
+func _webxr_session_started() -> void:
 	$CanvasLayer/Button.visible = false
 	# This tells Godot to start rendering to the headset.
 	get_viewport().use_xr = true
@@ -85,12 +85,12 @@ func _webxr_session_started():
 	print("Reference space type: " + interface.reference_space_type)
 
 
-func _webxr_session_ended():
+func _webxr_session_ended() -> void:
 	$CanvasLayer/Button.visible = true
 	# If the user exits immersive mode, then we tell Godot to render to the web
 	# page again.
 	get_viewport().use_xr = false
 
 
-func _webxr_session_failed(message):
+func _webxr_session_failed(message) -> void:
 	OS.alert("Failed to initialize: " + message)

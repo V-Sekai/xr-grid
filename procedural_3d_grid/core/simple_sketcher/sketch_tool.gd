@@ -16,7 +16,7 @@ class_name SketchTool extends Node3D
 @onready var simple_sketch = SimpleSketch.new()
 
 
-func _ready():
+func _ready() -> void:
 	assert(canvas != null)
 
 	simple_sketch.target_mesh = canvas.get_node("strokes").mesh
@@ -25,7 +25,7 @@ func _ready():
 var prev_active = false
 
 
-func _process(delta):
+func _process(delta) -> void:
 	if active and not prev_active:
 		simple_sketch.stroke_begin()
 

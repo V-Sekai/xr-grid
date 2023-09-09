@@ -18,7 +18,7 @@ extends Node3D
 @onready var grid2 = $BaseProceduralGrid3D/BaseProceduralGrid3D2
 
 
-func _process(delta):
+func _process(delta) -> void:
 	var exponent = log(global_transform.basis[0].length()) / log(2.0)
 	var level = floor(exponent)
 	grid1.scale = Vector3(distance_between_points, distance_between_points, distance_between_points) / pow(2.0, level)

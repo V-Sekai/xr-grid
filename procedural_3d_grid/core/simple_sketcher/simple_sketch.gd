@@ -11,7 +11,7 @@ var target_mesh: ArrayMesh
 var is_beginning = false
 
 
-func stroke_begin():
+func stroke_begin() -> void:
 	is_beginning = true
 
 
@@ -20,7 +20,7 @@ var prev_size
 var prev_color
 
 
-func stroke_add(point: Vector3, size: float = .01, color: Color = Color(0, 0, 0)):
+func stroke_add(point: Vector3, size: float = .01, color: Color = Color(0, 0, 0)) -> void:
 	if is_beginning:
 		addLine(point, point, size, size, color, color, true)
 		is_beginning = false
@@ -32,7 +32,7 @@ func stroke_add(point: Vector3, size: float = .01, color: Color = Color(0, 0, 0)
 	prev_color = color
 
 
-func stroke_end():
+func stroke_end() -> void:
 	is_beginning = false
 	pass
 
@@ -40,7 +40,7 @@ func stroke_end():
 var prev_tangent: Vector3
 
 
-func addLine(from: Vector3, to: Vector3, from_size: float = .01, to_size: float = .01, from_color: Color = Color(0, 0, 0), to_color: Color = Color(0, 0, 0), begin_stroke: bool = false):
+func addLine(from: Vector3, to: Vector3, from_size: float = .01, to_size: float = .01, from_color: Color = Color(0, 0, 0), to_color: Color = Color(0, 0, 0), begin_stroke: bool = false) -> void:
 	assert(target_mesh != null)
 
 	var from_tangent = prev_tangent
