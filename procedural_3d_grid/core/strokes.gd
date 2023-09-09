@@ -8,7 +8,7 @@ extends MeshInstance3D
 @export var hand_left: XRController3D
 @export var hand_right: XRController3D
 
-@onready var simple_sketch = SimpleSketch.new()
+@onready var simple_sketch: SimpleSketch = SimpleSketch.new()
 
 
 func _ready() -> void:
@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 
 		var hand_left_just_pressed: bool = is_zero_approx(hand_left_pressed)
 
-		simple_sketch.addLine(from, to, prev_hand_left_pressed * max_size, hand_left_pressed * max_size, Color(1, 1, 1), Color(1, 1, 1), hand_left_just_pressed)
+		simple_sketch.add_line(from, to, prev_hand_left_pressed * max_size, hand_left_pressed * max_size, Color(1, 1, 1), Color(1, 1, 1), hand_left_just_pressed)
 
 	if not is_zero_approx(hand_right_pressed):
 		var from: Vector3 = to_local(prev_hand_right_transform.origin)
@@ -40,7 +40,7 @@ func _process(delta: float) -> void:
 
 		var hand_right_just_pressed: bool = is_zero_approx(hand_right_pressed)
 
-		simple_sketch.addLine(from, to, prev_hand_right_pressed * max_size, hand_right_pressed * max_size, Color(0, 0, 0), Color(0, 0, 0), hand_right_just_pressed)
+		simple_sketch.add_line(from, to, prev_hand_right_pressed * max_size, hand_right_pressed * max_size, Color(0, 0, 0), Color(0, 0, 0), hand_right_just_pressed)
 
 	prev_hand_left_transform = hand_left.global_transform
 	prev_hand_right_transform = hand_right.global_transform
