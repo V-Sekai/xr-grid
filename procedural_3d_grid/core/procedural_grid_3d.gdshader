@@ -1,15 +1,11 @@
 shader_type spatial;
 
 render_mode unshaded;
-//render_mode cull_disabled;
-//render_mode world_vertex_coords;
 render_mode skip_vertex_transform;
 
 uniform uint _DisplayGridLines;
 
-//uniform float _DistanceBetweenPoints;
 uniform float _PointRadius = .02;
-//uniform uint _PointsPerDim;
 uniform vec3 _GridCenter = vec3(0,0,0);
 
 uniform vec4 _Color : source_color = vec4(0,0,0,1);
@@ -61,7 +57,6 @@ void handlePoint(vec3 pos, mat4 worldToView, inout mat4 modelToView){
 void handleLine(vec3 pos, vec3 normal, mat4 worldToView, inout mat4 modelToView){
 	float lineWidth = _PointRadius * 0.3;
 	
-	//vec3 pos = modelToWorld[3].xyz;// + floor(viewToWorld[3].xyz);
 	pos = xform(worldToView, pos, 1);
 	
 	normal = mat3(modelToView) * normal;
@@ -99,7 +94,6 @@ void vertex(){
 	}
 	
 	// Translate back to camera space
-	//eye_matrix[3].xyz += EYE_OFFSET;
 	MODELVIEW_MATRIX[3].xyz += EYE_OFFSET;
 	
 	// Perform vertex transformation (model to view)

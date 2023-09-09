@@ -9,10 +9,7 @@ extends Node3D
 @export var level_color: GradientTexture1D
 @export var distance_between_points := 0.5
 
-# Should be optional
 @export_node_path("Node3D") var FOCUS_NODE: NodePath
-#@onready var focus_node = get_node(FOCUS_NODE)
-#@export_node_path("Node3D") var focus_node : Node3D = null
 
 @onready var grid1: Node3D = $BaseProceduralGrid3D
 @onready var grid2: Node3D = $BaseProceduralGrid3D/BaseProceduralGrid3D2

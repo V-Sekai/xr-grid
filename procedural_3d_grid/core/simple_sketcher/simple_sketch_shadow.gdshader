@@ -15,15 +15,15 @@ mat4 getLineBillboard(vec3 a,vec3 b){
 }
 
 varying vec3 model_pos;
+
 void vertex(){
-	//VERTEX = ( MODEL_MATRIX * vec4(VERTEX,1) ).xyz;
 	vec3 tangent = TANGENT;
 	
 	float m = .7;
 	VERTEX.x += VERTEX.y * m;
 	tangent.x += tangent.y * m;
 	
-	UV *= 1.0;//length(MODEL_MATRIX[0].xyz);
+	UV *= 1.0;
 	VERTEX += UV.x * tangent + UV.y * normalize(vec3(-tangent.z, 0, tangent.x));
 
 	model_pos = VERTEX;
@@ -32,6 +32,7 @@ void vertex(){
 	
 	VERTEX = ( MODELVIEW_MATRIX * vec4(VERTEX,1) ).xyz;
 }
+
 void fragment(){
 	ALBEDO = vec3(0.02);
 	ALPHA = COLOR.a;

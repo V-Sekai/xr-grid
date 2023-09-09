@@ -22,7 +22,6 @@ func set_pulse_regenerate_mesh(_value: Variant):
 func set_points_per_dimension(value: int):
 	points_per_dimension = value
 	multimesh.instance_count = points_per_dimension * points_per_dimension * points_per_dimension
-
 	regenerate_mesh()
 
 
