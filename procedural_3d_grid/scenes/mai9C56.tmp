@@ -1,16 +1,16 @@
 [gd_scene load_steps=39 format=3 uid="uid://dj5hnpndrjq7p"]
 
-[ext_resource type="Script" path="res://hand.gd" id="2_bpl2v"]
+[ext_resource type="Script" path="res://procedural_3d_grid/core/hand.gd" id="2_bpl2v"]
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail_draw_pass.gdshader" id="3_biyvx"]
-[ext_resource type="Script" path="res://XrOrigin3d.gd" id="3_p8s7d"]
-[ext_resource type="Script" path="res://xr_pinch.gd" id="4_4qf3o"]
-[ext_resource type="Script" path="res://SimpleSketcher/sketch_tool.gd" id="5_uqwsl"]
+[ext_resource type="Script" path="res://procedural_3d_grid/core/xr_origin.gd" id="3_p8s7d"]
+[ext_resource type="Script" path="res://procedural_3d_grid/core/xr_pinch.gd" id="4_4qf3o"]
+[ext_resource type="Script" path="res://procedural_3d_grid/core/simple_sketcher/sketch_tool.gd" id="5_uqwsl"]
 [ext_resource type="Script" path="res://addons/GPUTrail-main/GPUTrail3D.gd" id="6_dqij4"]
-[ext_resource type="Shader" path="res://SimpleSketcher/simple_sketch.gdshader" id="6_wgf7r"]
-[ext_resource type="PackedScene" uid="uid://ye52hc0t6bue" path="res://Procedural3DGrid/procedural_grid_3d.tscn" id="6_yejl2"]
-[ext_resource type="PackedScene" uid="uid://cuikfhtqs5870" path="res://floof/Black Cat Fire Floof 2023 Perfect Sync.vrm" id="9_u6pqv"]
-[ext_resource type="Shader" path="res://SimpleSketcher/simple_sketch_shadow.gdshader" id="10_pydft"]
+[ext_resource type="Shader" path="res://procedural_3d_grid/core/simple_sketcher/simple_sketch.gdshader" id="6_wgf7r"]
+[ext_resource type="PackedScene" uid="uid://ye52hc0t6bue" path="res://procedural_3d_grid/core/procedural_grid_3d.tscn" id="6_yejl2"]
+[ext_resource type="PackedScene" uid="uid://cuikfhtqs5870" path="res://procedural_3d_grid/art/vsk_floof/Black Cat Fire Floof 2023 Perfect Sync.vrm" id="9_u6pqv"]
+[ext_resource type="Shader" path="res://procedural_3d_grid/core/simple_sketcher/simple_sketch_shadow.gdshader" id="10_pydft"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hf7ak"]
 shading_mode = 0
@@ -331,6 +331,8 @@ material_override = SubResource("StandardMaterial3D_dik2t")
 mesh = SubResource("PlaneMesh_skpai")
 skeleton = NodePath("../..")
 
+[node name="Black Cat Fire Floof 2023 Perfect Sync" parent="canvas" instance=ExtResource("9_u6pqv")]
+
 [node name="Node3D" type="Node3D" parent="canvas"]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 
@@ -338,8 +340,6 @@ transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
 material_override = SubResource("ShaderMaterial_1r3ns")
 mesh = SubResource("ArrayMesh_dpjv4")
 skeleton = NodePath("../..")
-
-[node name="Black Cat Fire Floof 2023 Perfect Sync" parent="canvas" instance=ExtResource("9_u6pqv")]
 
 [node name="ProceduralGrid3D" parent="canvas" instance=ExtResource("6_yejl2")]
 level_color = SubResource("GradientTexture1D_nbrpf")

@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://cuikfhtqs5870"
-path="res://.godot/imported/Black Cat Fire Floof 2023 Perfect Sync.vrm-43fa7c47c013e700a800e6295b3bad2a.scn"
+path="res://.godot/imported/Black Cat Fire Floof 2023 Perfect Sync.vrm-347b665c3893017a2d43389365fff069.scn"
 
 [deps]
 
-source_file="res://floof/Black Cat Fire Floof 2023 Perfect Sync.vrm"
-dest_files=["res://.godot/imported/Black Cat Fire Floof 2023 Perfect Sync.vrm-43fa7c47c013e700a800e6295b3bad2a.scn"]
+source_file="res://procedural_3d_grid/art/vsk_floof/Black Cat Fire Floof 2023 Perfect Sync.vrm"
+dest_files=["res://.godot/imported/Black Cat Fire Floof 2023 Perfect Sync.vrm-347b665c3893017a2d43389365fff069.scn"]
 
 [params]
 

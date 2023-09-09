@@ -11,9 +11,13 @@ config_version=5
 [application]
 
 config/name="xr-grid-shader"
-run/main_scene="res://main.tscn"
+run/main_scene="res://procedural_3d_grid/scenes/main.tscn"
 config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+VSKVersion="*res://addons/vsk_version/vsk_version.gd"
 
 [display]
 
@@ -21,7 +25,7 @@ window/vsync/vsync_mode=0
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/GPUTrail-main/plugin.cfg", "res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/vrm/plugin.cfg")
+enabled=PackedStringArray("res://addons/GPUTrail-main/plugin.cfg", "res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/vrm/plugin.cfg", "res://addons/vsk_version/plugin.cfg")
 
 [gui]
 

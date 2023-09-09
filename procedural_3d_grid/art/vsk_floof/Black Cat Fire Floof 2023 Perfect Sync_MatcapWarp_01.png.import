@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://carqixn5k24rc"
-path="res://.godot/imported/Black Cat Fire Floof 2023 Perfect Sync_texture_10.png-6756ed6a4aa24e5256780e03da2a3e99.ctex"
+uid="uid://buwenjh6mdnw0"
+path="res://.godot/imported/Black Cat Fire Floof 2023 Perfect Sync_MatcapWarp_01.png-57c438397b38f16f84282c02c850858e.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,8 +11,8 @@ generator_parameters={}
 
 [deps]
 
-source_file="res://floof/Black Cat Fire Floof 2023 Perfect Sync_texture_10.png"
-dest_files=["res://.godot/imported/Black Cat Fire Floof 2023 Perfect Sync_texture_10.png-6756ed6a4aa24e5256780e03da2a3e99.ctex"]
+source_file="res://procedural_3d_grid/art/vsk_floof/Black Cat Fire Floof 2023 Perfect Sync_MatcapWarp_01.png"
+dest_files=["res://.godot/imported/Black Cat Fire Floof 2023 Perfect Sync_MatcapWarp_01.png-57c438397b38f16f84282c02c850858e.ctex"]
 
 [params]
 
