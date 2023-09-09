@@ -1,3 +1,8 @@
+# Copyright (c) 2018-present. This file is part of V-Sekai https://v-sekai.org/.
+# SaracenOne & K. S. Ernest (Fire) Lee & Lyuma & MMMaellon & Contributors
+# GPUTrail3D.gd
+# SPDX-License-Identifier: MIT
+
 @tool
 @icon("icon.png")
 class_name GPUTrail3D extends GPUParticles3D
