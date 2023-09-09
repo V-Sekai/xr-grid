@@ -23,6 +23,10 @@ window/vsync/vsync_mode=0
 
 enabled=PackedStringArray("res://addons/GPUTrail-main/plugin.cfg", "res://addons/Godot-MToon-Shader/plugin.cfg", "res://addons/vrm/plugin.cfg")
 
+[gui]
+
+theme/default_font_multichannel_signed_distance_field=true
+
 [rendering]
 
 textures/vram_compression/import_s3tc_bptc=true
