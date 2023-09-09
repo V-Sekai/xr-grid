@@ -302,17 +302,6 @@ curve = SubResource("CurveTexture_m72oh")
 billboard = true
 _defaults_have_been_set = true
 
-[node name="CanvasLayer" type="CanvasLayer" parent="XROrigin3D"]
-visible = false
-
-[node name="Button" type="Button" parent="XROrigin3D/CanvasLayer"]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Enter VR"
-
 [node name="canvas" type="Node3D" parent="." node_paths=PackedStringArray("hand_left", "hand_right")]
 script = ExtResource("4_4qf3o")
 hand_left = NodePath("../XROrigin3D/hand_left")
