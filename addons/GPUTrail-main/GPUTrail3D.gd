@@ -15,7 +15,7 @@ class_name GPUTrail3D extends GPUParticles3D
 # PUBLIC
 
 ## Length is the number of steps in the trail
-@export var length = 100:
+@export var length: int = 100:
 	set = _set_length
 
 ## The main texture of the trail.[br]
@@ -34,36 +34,41 @@ class_name GPUTrail3D extends GPUParticles3D
 	set = _set_curve
 
 ## Set [member vertical_texture] to adjust for orientation
-@export var vertical_texture := false:
+@export var vertical_texture: bool = false:
 	set = _set_vertical_texture
 
 ## Enable [member use_red_as_alpha] to use the red color channel of [member texture] as alpha
-@export var use_red_as_alpha := false:
+@export var use_red_as_alpha: bool = false:
 	set = _set_use_red_as_alpha
 
 ## Makes trail face camera. I haven't finished this yet
-@export var billboard := false:
+@export var billboard: bool = false:
 	set = _set_billboard
 
 ## Enable to improve the mapping of [member texture] to the trail
-@export var dewiggle := true:
+@export var dewiggle: bool = true:
 	set = _set_dewiggle
 
 ## Enable to improve the mapping of [member texture] to the trail
-@export var clip_overlaps := true:
+@export var clip_overlaps: bool = true:
 	set = _set_clip_overlaps
 
 ## Enable [member snap_to_transform] to snap the start of the trail to the nodes position. This may not be noticeable unless you
 ## have changed [member fixed_fps], which you can use to optimize the trail
-@export var snap_to_transform := false:
+@export var snap_to_transform: bool = false:
 	set = _set_snap_to_transform
 
 # PRIVATE
 
+@onready var _old_pos: Vector3 = global_position
+@onready var _billboard_transform: Transform3D = global_transform
+
+var _flags: int = 0
+
 const _DEFAULT_TEXTURE = "defaults/texture.tres"
 const _DEFAULT_CURVE = "defaults/curve.tres"
 
-var _defaults_have_been_set = false
+var _defaults_have_been_set: bool = false
 
 
 func _get_property_list() -> Array:
@@ -92,7 +97,7 @@ func _ready() -> void:
 		draw_pass_1.material.resource_local_to_scene = true
 
 
-func _set_length(value) -> void:
+func _set_length(value: float) -> void:
 	length = value
 
 	if _defaults_have_been_set:
@@ -102,7 +107,7 @@ func _set_length(value) -> void:
 	restart()
 
 
-func _set_texture(value) -> void:
+func _set_texture(value: Texture) -> void:
 	texture = value
 	if value:
 		draw_pass_1.material.set_shader_parameter("tex", texture)
@@ -110,12 +115,12 @@ func _set_texture(value) -> void:
 		draw_pass_1.material.set_shader_parameter("tex", preload(_DEFAULT_TEXTURE))
 
 
-func _set_color_ramp(value) -> void:
+func _set_color_ramp(value: GradientTexture1D) -> void:
 	color_ramp = value
 	draw_pass_1.material.set_shader_parameter("color_ramp", color_ramp)
 
 
-func _set_curve(value) -> void:
+func _set_curve(value: CurveTexture) -> void:
 	curve = value
 	if value:
 		draw_pass_1.material.set_shader_parameter("curve", curve)
@@ -123,19 +128,19 @@ func _set_curve(value) -> void:
 		draw_pass_1.material.set_shader_parameter("curve", preload(_DEFAULT_CURVE))
 
 
-func _set_vertical_texture(value) -> void:
+func _set_vertical_texture(value: bool) -> void:
 	vertical_texture = value
 	_flags = _set_flag(_flags, 0, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-func _set_use_red_as_alpha(value) -> void:
+func _set_use_red_as_alpha(value: bool) -> void:
 	use_red_as_alpha = value
 	_flags = _set_flag(_flags, 1, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-func _set_billboard(value) -> void:
+func _set_billboard(value: bool) -> void:
 	billboard = value
 	_flags = _set_flag(_flags, 2, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
@@ -145,39 +150,35 @@ func _set_billboard(value) -> void:
 	restart()
 
 
-func _set_dewiggle(value) -> void:
+func _set_dewiggle(value: bool) -> void:
 	dewiggle = value
 	_flags = _set_flag(_flags, 3, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-func _set_snap_to_transform(value) -> void:
+func _set_snap_to_transform(value: bool) -> void:
 	snap_to_transform = value
 	_flags = _set_flag(_flags, 4, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-func _set_clip_overlaps(value) -> void:
+func _set_clip_overlaps(value: bool) -> void:
 	clip_overlaps = value
 	_flags = _set_flag(_flags, 5, value)
 	draw_pass_1.material.set_shader_parameter("flags", _flags)
 
 
-@onready var _old_pos: Vector3 = global_position
-@onready var _billboard_transform: Transform3D = global_transform
-
-
-func _process(delta) -> void:
+func _process(delta: float) -> void:
 	if snap_to_transform:
 		draw_pass_1.material.set_shader_parameter("emmission_transform", global_transform)
 
 	await RenderingServer.frame_pre_draw
 
 	if billboard:
-		var delta_position = global_position - _old_pos
+		var delta_position: Vector3 = global_position - _old_pos
 
 		if delta_position:
-			var tangent = global_transform.basis[1].length() * (delta_position).normalized()
+			var tangent: Vector3 = global_transform.basis[1].length() * (delta_position).normalized()
 			_update_billboard_transform(tangent)
 
 		RenderingServer.instance_set_transform(get_instance(), _billboard_transform)
@@ -185,20 +186,17 @@ func _process(delta) -> void:
 	_old_pos = global_position
 
 
-func _update_billboard_transform(tangent) -> void:
+func _update_billboard_transform(tangent: Vector3) -> void:
 	_billboard_transform = global_transform
-	var p = _billboard_transform.basis[1]
-	var x = tangent
-	var angle = p.angle_to(x)
-	var rotation_axis = p.cross(x).normalized()
+	var p: Vector3 = _billboard_transform.basis[1]
+	var x: Vector3 = tangent
+	var angle: float = p.angle_to(x)
+	var rotation_axis: Vector3 = p.cross(x).normalized()
 	if rotation_axis:
 		_billboard_transform.basis = _billboard_transform.basis.rotated(rotation_axis, angle)
 		_billboard_transform.basis = _billboard_transform.basis.scaled(Vector3(0.5, 0.5, 0.5))
 		_billboard_transform.origin += _billboard_transform.basis[1]
 
 
-var _flags = 0
-
-
-func _set_flag(i, idx: int, value: bool) -> int:
+func _set_flag(i: int, idx: int, value: bool) -> int:
 	return (i & ~(1 << idx)) | (int(value) << idx)
