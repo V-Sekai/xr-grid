@@ -322,6 +322,7 @@ skeleton = NodePath("../..")
 
 [node name="Node3D" type="Node3D" parent="canvas"]
 transform = Transform3D(-1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+visible = false
 
 [node name="strokes_mirror" type="MeshInstance3D" parent="canvas/Node3D"]
 material_override = SubResource("ShaderMaterial_1r3ns")
