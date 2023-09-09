@@ -22,7 +22,7 @@ func _ready() -> void:
 	simple_sketch.target_mesh = canvas.get_node("strokes").mesh
 
 
-var prev_active = false
+var prev_active: bool = false
 
 
 func _process(delta) -> void:

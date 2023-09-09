@@ -8,16 +8,17 @@ class_name SimpleSketch extends RefCounted
 
 var target_mesh: ArrayMesh
 
-var is_beginning = false
+var is_beginning: bool = false
 
 
 func stroke_begin() -> void:
 	is_beginning = true
 
 
-var prev_point
-var prev_size
-var prev_color
+var prev_point: Vector3
+var prev_size: float
+var prev_color: Color
+var prev_tangent: Vector3
 
 
 func stroke_add(point: Vector3, size: float = .01, color: Color = Color(0, 0, 0)) -> void:
@@ -34,10 +35,6 @@ func stroke_add(point: Vector3, size: float = .01, color: Color = Color(0, 0, 0)
 
 func stroke_end() -> void:
 	is_beginning = false
-	pass
-
-
-var prev_tangent: Vector3
 
 
 func addLine(from: Vector3, to: Vector3, from_size: float = .01, to_size: float = .01, from_color: Color = Color(0, 0, 0), to_color: Color = Color(0, 0, 0), begin_stroke: bool = false) -> void:
@@ -49,7 +46,6 @@ func addLine(from: Vector3, to: Vector3, from_size: float = .01, to_size: float 
 	if begin_stroke:
 		from_tangent = to_tangent
 
-	# Begin draw.
 	var arrays = []
 	arrays.resize(ArrayMesh.ARRAY_MAX)
 	arrays[ArrayMesh.ARRAY_VERTEX] = PackedVector3Array()
@@ -59,7 +55,7 @@ func addLine(from: Vector3, to: Vector3, from_size: float = .01, to_size: float 
 
 	# Build on original mesh if possible
 	if target_mesh.get_surface_count() > 0:
-		arrays = target_mesh.surface_get_arrays(0)  #target_mesh.get_surface_count()-1)
+		arrays = target_mesh.surface_get_arrays(0)
 
 	# A
 	arrays[ArrayMesh.ARRAY_VERTEX].append(from)
@@ -99,30 +95,5 @@ func addLine(from: Vector3, to: Vector3, from_size: float = .01, to_size: float 
 
 	target_mesh.clear_surfaces()
 	target_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
-
-#	target_mesh.surface_begin(Mesh.PRIMITIVE_TRIANGLE_STRIP)
-#
-#	target_mesh.surface_set_normal(from_tangent)
-#	target_mesh.surface_set_uv(Vector2(0, -from_size))
-#	target_mesh.surface_set_color(from_color)
-#	target_mesh.surface_add_vertex(from)
-#
-#	target_mesh.surface_set_normal(from_tangent)
-#	target_mesh.surface_set_uv(Vector2(0, from_size))
-#	target_mesh.surface_set_color(from_color)
-#	target_mesh.surface_add_vertex(from)
-#
-#	target_mesh.surface_set_normal(to_tangent)
-#	target_mesh.surface_set_uv(Vector2(0, -to_size))
-#	target_mesh.surface_set_color(to_color)
-#	target_mesh.surface_add_vertex(to)
-#
-#	target_mesh.surface_set_normal(to_tangent)
-#	target_mesh.surface_set_uv(Vector2(0, to_size))
-#	target_mesh.surface_set_color(to_color)
-#	target_mesh.surface_add_vertex(to)
-#
-#	# End drawing.
-#	target_mesh.surface_end()
 
 	prev_tangent = to_tangent

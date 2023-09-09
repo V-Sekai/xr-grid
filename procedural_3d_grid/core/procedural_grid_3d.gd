@@ -14,13 +14,13 @@ extends Node3D
 #@onready var focus_node = get_node(FOCUS_NODE)
 #@export_node_path("Node3D") var focus_node : Node3D = null
 
-@onready var grid1 = $BaseProceduralGrid3D
-@onready var grid2 = $BaseProceduralGrid3D/BaseProceduralGrid3D2
+@onready var grid1: Node3D = $BaseProceduralGrid3D
+@onready var grid2: Node3D = $BaseProceduralGrid3D/BaseProceduralGrid3D2
 
 
 func _process(delta) -> void:
-	var exponent = log(global_transform.basis[0].length()) / log(2.0)
-	var level = floor(exponent)
+	var exponent: float = log(global_transform.basis[0].length()) / log(2.0)
+	var level: float = floor(exponent)
 	grid1.scale = Vector3(distance_between_points, distance_between_points, distance_between_points) / pow(2.0, level)
 
 	if level_color:

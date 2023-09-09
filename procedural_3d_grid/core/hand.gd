@@ -5,15 +5,15 @@
 
 extends XRController3D
 
-@onready var sketch_tool = $SketchTool
+@onready var sketch_tool: Node3D = $SketchTool
 
 var prev_hand_transform: Transform3D
 var prev_hand_pressed: float
 
 
 func _process(delta) -> void:
-	var hand_pressed = get_float("trigger")
-	var max_size = 0.01
+	var hand_pressed: float = get_float("trigger")
+	var max_size: float = 0.01
 
 	if is_zero_approx(hand_pressed):
 		sketch_tool.active = false

@@ -6,7 +6,7 @@
 extends Node3D
 
 var interface: XRInterface = null
-var vr_supported = false
+var vr_supported: bool = false
 
 
 func _ready() -> void:
@@ -41,7 +41,7 @@ func _ready() -> void:
 		interface.is_session_supported("immersive-vr")
 
 
-func _webxr_session_supported(session_mode, supported) -> void:
+func _webxr_session_supported(session_mode: String, supported: bool) -> void:
 	if session_mode == "immersive-vr":
 		vr_supported = supported
 
@@ -92,5 +92,5 @@ func _webxr_session_ended() -> void:
 	get_viewport().use_xr = false
 
 
-func _webxr_session_failed(message) -> void:
+func _webxr_session_failed(message: String) -> void:
 	OS.alert("Failed to initialize: " + message)

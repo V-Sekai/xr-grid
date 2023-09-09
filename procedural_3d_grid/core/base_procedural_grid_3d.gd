@@ -8,46 +8,43 @@ extends MultiMeshInstance3D
 
 @export var pulse_regenerate_mesh: bool:
 	set = set_pulse_regenerate_mesh
-@export var points_per_dimension := 6:
+@export var points_per_dimension: int = 6:
 	set = set_points_per_dimension
-@export var n_vertex_circle := 32
-@export var fade_zone := 0.5
-@export var far_fade := 1.0
+@export var n_vertex_circle: int = 32
+@export var fade_zone: float = 0.5
+@export var far_fade: float = 1.0
 
 
-func set_pulse_regenerate_mesh(value):
+func set_pulse_regenerate_mesh(_value: Variant):
 	regenerate_mesh()
 
 
-func set_points_per_dimension(value):
+func set_points_per_dimension(value: int):
 	points_per_dimension = value
 	multimesh.instance_count = points_per_dimension * points_per_dimension * points_per_dimension
 
 	regenerate_mesh()
 
 
-func _process(delta):
+func _process(delta: float):
 	material_override.set_shader_parameter("_GridCenter", global_position)
-
-	#regenerate_mesh()
 
 
 func set_points_per_dimension_from_fade():
-	# hmmmm, something is not right
 	points_per_dimension = int((fade_zone + far_fade) * 2)
 
 
 func regenerate_mesh():
-	var arr_mesh := ArrayMesh.new()
+	var arr_mesh: ArrayMesh = ArrayMesh.new()
 
-	var arrays = []
+	var arrays: Array = []
 	arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array()
 	arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array()
 	arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array()
 
-	# generate circle
-	var circle_p := Vector3(1, 0, 0)
+	# Generate a circle.
+	var circle_p: Vector3 = Vector3(1, 0, 0)
 	var angle: float = TAU * 1.0 / n_vertex_circle
 	for i in range(1, n_vertex_circle + 1):
 		var onCirclePos := Vector3(cos(i * angle), sin(i * angle), 0.0)
@@ -68,7 +65,7 @@ func regenerate_mesh():
 
 	arr_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
 
-	const axes = [Vector3(1, 0, 0), Vector3(0, 1, 0), Vector3(0, 0, 1)]
+	const axes: Array[Vector3] = [Vector3(1, 0, 0), Vector3(0, 1, 0), Vector3(0, 0, 1)]
 	for i in range(0, 3):
 		arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array()
 		arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array()
