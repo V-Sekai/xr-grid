@@ -87,8 +87,8 @@ func regenerate_mesh():
 		if points_per_dimension != 0 and points_per_dimension % points_per_dimension != 0 and points_per_dimension * points_per_dimension != 0:
 			var new_origin: Vector3 = Vector3()
 			new_origin.x = i % points_per_dimension
-			var x_divisor: float = points_per_dimension % points_per_dimension
-			new_origin.y = float(i) / x_divisor
+			var y_divisor: float = points_per_dimension % points_per_dimension
+			new_origin.y = float(i) / y_divisor
 			var z_divisor: float = points_per_dimension * points_per_dimension
 			new_origin.z = float(i) / z_divisor
 			grid_transform.origin = new_origin
