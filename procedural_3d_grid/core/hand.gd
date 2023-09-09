@@ -15,7 +15,7 @@ func _process(_delta: float) -> void:
 	var hand_pressed: float = get_float("trigger")
 	var max_size: float = 0.01
 
-	if is_zero_approx(hand_pressed):
+	if hand_pressed <= 0.05:
 		sketch_tool.active = false
 	else:
 		sketch_tool.active = true
