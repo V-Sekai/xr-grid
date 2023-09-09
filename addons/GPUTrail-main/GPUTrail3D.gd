@@ -76,9 +76,6 @@ func _get_property_list() -> Array:
 
 
 func _ready() -> void:
-	if OS.get_name() == "Web":
-		visible = false
-	
 	if not _defaults_have_been_set:
 		_defaults_have_been_set = true
 

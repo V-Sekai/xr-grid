@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bg6gj8x7d3mrl"]
+[gd_scene load_steps=39 format=3 uid="uid://dj5hnpndrjq7p"]
 
 [ext_resource type="Script" path="res://procedural_3d_grid/core/hand.gd" id="2_bpl2v"]
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
@@ -9,7 +9,6 @@
 [ext_resource type="Script" path="res://addons/GPUTrail-main/GPUTrail3D.gd" id="6_dqij4"]
 [ext_resource type="Shader" path="res://procedural_3d_grid/core/simple_sketcher/simple_sketch.gdshader" id="6_wgf7r"]
 [ext_resource type="PackedScene" uid="uid://ye52hc0t6bue" path="res://procedural_3d_grid/core/procedural_grid_3d.tscn" id="6_yejl2"]
-[ext_resource type="Script" path="res://procedural_3d_grid/core/show_webxr_button.gd" id="7_vlnl4"]
 [ext_resource type="Shader" path="res://procedural_3d_grid/core/simple_sketcher/simple_sketch_shadow.gdshader" id="10_pydft"]
 [ext_resource type="PackedScene" uid="uid://cccdflexw520e" path="res://procedural_3d_grid/art/sophia/sophia.glb" id="11_6yesq"]
 
@@ -248,7 +247,6 @@ script = ExtResource("3_p8s7d")
 
 [node name="hand_left" type="XRController3D" parent="XROrigin3D"]
 tracker = &"left_hand"
-pose = &"skeleton"
 script = ExtResource("2_bpl2v")
 
 [node name="SketchTool" type="Node3D" parent="XROrigin3D/hand_left"]
@@ -277,7 +275,6 @@ _defaults_have_been_set = true
 
 [node name="hand_right" type="XRController3D" parent="XROrigin3D"]
 tracker = &"right_hand"
-pose = &"skeleton"
 script = ExtResource("2_bpl2v")
 
 [node name="SketchTool" type="Node3D" parent="XROrigin3D/hand_right"]
@@ -306,7 +303,7 @@ billboard = true
 _defaults_have_been_set = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="XROrigin3D"]
-script = ExtResource("7_vlnl4")
+visible = false
 
 [node name="Button" type="Button" parent="XROrigin3D/CanvasLayer"]
 anchors_preset = 15
