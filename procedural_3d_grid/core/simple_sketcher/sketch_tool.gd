@@ -14,21 +14,26 @@ class_name SketchTool extends Node3D
 @export var color: Color = Color.BLACK
 
 @onready var simple_sketch = SimpleSketch.new()
+
+
 func _ready():
 	assert(canvas != null)
-	
+
 	simple_sketch.target_mesh = canvas.get_node("strokes").mesh
 
+
 var prev_active = false
+
+
 func _process(delta):
 	if active and not prev_active:
 		simple_sketch.stroke_begin()
-	
+
 	if active and prev_active:
 		var point = canvas.to_local(global_transform.origin)
 		simple_sketch.stroke_add(point, pressure / canvas.scale.x, color)
-	
+
 	if not active and prev_active:
 		simple_sketch.stroke_end()
-	
+
 	prev_active = active
