@@ -9,8 +9,8 @@
 [ext_resource type="Script" path="res://addons/GPUTrail-main/GPUTrail3D.gd" id="6_dqij4"]
 [ext_resource type="Shader" path="res://procedural_3d_grid/core/simple_sketcher/simple_sketch.gdshader" id="6_wgf7r"]
 [ext_resource type="PackedScene" uid="uid://ye52hc0t6bue" path="res://procedural_3d_grid/core/procedural_grid_3d.tscn" id="6_yejl2"]
-[ext_resource type="PackedScene" uid="uid://cuikfhtqs5870" path="res://procedural_3d_grid/art/vsk_floof/Black Cat Fire Floof 2023 Perfect Sync.vrm" id="9_u6pqv"]
 [ext_resource type="Shader" path="res://procedural_3d_grid/core/simple_sketcher/simple_sketch_shadow.gdshader" id="10_pydft"]
+[ext_resource type="PackedScene" uid="uid://cccdflexw520e" path="res://procedural_3d_grid/art/sophia/sophia.glb" id="11_6yesq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hf7ak"]
 shading_mode = 0
@@ -339,9 +339,6 @@ material_override = SubResource("ShaderMaterial_1r3ns")
 mesh = SubResource("ArrayMesh_dpjv4")
 skeleton = NodePath("../..")
 
-[node name="Black Cat Fire Floof 2023 Perfect Sync" parent="canvas" instance=ExtResource("9_u6pqv")]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 0, 0, 0)
-
 [node name="ProceduralGrid3D" parent="canvas" instance=ExtResource("6_yejl2")]
 level_color = SubResource("GradientTexture1D_nbrpf")
 FOCUS_NODE = NodePath("../../XROrigin3D/hand_right/focus")
@@ -351,3 +348,6 @@ transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866027, -
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="canvas"]
 environment = SubResource("Environment_6juhc")
+
+[node name="sophia" parent="canvas" instance=ExtResource("11_6yesq")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, 0)
