@@ -59,10 +59,13 @@ func split_blend(
 	var basis_inv : Basis = from.basis.inverse()
 	from.basis = Basis(src_rot.slerp(dst_rot, rot_weight).normalized()) * Basis.from_scale(src_scale.lerp(dst_scale, scale_weight))
 	
-	from_pivot = from_pivot.lerp(to_pivot, pos_weight)
-	
-	from.origin -= from_pivot
-	from.origin = from.basis * (basis_inv * from.origin)
-	from.origin += from_pivot
+	#from.origin -= from_pivot
+	#to.origin -= to_pivot
+	from.origin = from.origin.lerp(to.origin, pos_weight)
+	#from.origin = from_pivot.lerp(to_pivot, pos_weight) + from.origin.slerp(to.origin, pos_weight)
+
+	#from.origin -= from_pivot
+	#from.origin = from.basis * (basis_inv * from.origin)
+	#from.origin += from_pivot.lerp(to_pivot, pos_weight)
 	
 	return from

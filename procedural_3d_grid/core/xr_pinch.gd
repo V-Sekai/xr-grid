@@ -44,14 +44,12 @@ func _process(_delta: float) -> void:
 		to_pivot = Vector3()
 		delta_transform = Transform3D()
 
-	transform = target_transform * _world_grab.split_blend(Transform3D(), target_transform.affine_inverse() * transform, .8, .3, .2, from_pivot, to_pivot)
-	
 	target_transform = delta_transform * target_transform
 	
-	#transform = transform.interpolate_with(target_transform, lerp_factor * smooth_factor)
-	#transform = _world_grab.split_blend(target_transform, Transform3D()) * transform
-	#transform = target_transform*transform
-
+	#transform = _world_grab.split_blend(transform, target_transform, .2, 1.0, 1.0, from_pivot, to_pivot)
+	transform = target_transform
+	
+	
 	prev_hand_left_transform = hand_left.transform
 	prev_hand_right_transform = hand_right.transform
 	prev_hand_left_pressed = hand_left_pressed
