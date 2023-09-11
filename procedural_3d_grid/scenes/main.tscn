@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://bg6gj8x7d3mrl"]
+[gd_scene load_steps=40 format=3 uid="uid://bg6gj8x7d3mrl"]
 
 [ext_resource type="Script" path="res://procedural_3d_grid/core/hand.gd" id="2_bpl2v"]
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
@@ -206,6 +206,8 @@ material = SubResource("ShaderMaterial_sw5rf")
 render_priority = 0
 shader = ExtResource("6_wgf7r")
 
+[sub_resource type="ArrayMesh" id="ArrayMesh_autvg"]
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_4t5i7"]
 render_priority = 0
 shader = ExtResource("10_pydft")
@@ -310,6 +312,7 @@ hand_right = NodePath("../XROrigin3D/hand_right")
 
 [node name="strokes" type="MeshInstance3D" parent="canvas"]
 material_override = SubResource("ShaderMaterial_1r3ns")
+mesh = SubResource("ArrayMesh_autvg")
 
 [node name="strokes_shadow" type="MeshInstance3D" parent="canvas"]
 visible = false

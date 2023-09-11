@@ -38,7 +38,8 @@ func stroke_end() -> void:
 
 
 func add_line(from: Vector3, to: Vector3, from_size: float = .01, to_size: float = .01, from_color: Color = Color(0, 0, 0), to_color: Color = Color(0, 0, 0), begin_stroke: bool = false) -> void:
-	assert(target_mesh != null)
+	if target_mesh == null:
+		return
 
 	var from_tangent = prev_tangent
 	var to_tangent = to - from
