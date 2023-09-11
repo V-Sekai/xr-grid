@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bg6gj8x7d3mrl"]
+[gd_scene load_steps=41 format=3 uid="uid://bg6gj8x7d3mrl"]
 
 [ext_resource type="Script" path="res://procedural_3d_grid/core/hand.gd" id="2_bpl2v"]
 [ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" path="res://addons/GPUTrail-main/GPUTrail3D.gd" id="6_dqij4"]
 [ext_resource type="Shader" path="res://procedural_3d_grid/core/simple_sketcher/simple_sketch.gdshader" id="6_wgf7r"]
 [ext_resource type="PackedScene" uid="uid://ye52hc0t6bue" path="res://procedural_3d_grid/core/procedural_grid_3d.tscn" id="6_yejl2"]
+[ext_resource type="Script" path="res://procedural_3d_grid/core/follow_test.gd" id="8_uwiqs"]
 [ext_resource type="Shader" path="res://procedural_3d_grid/core/simple_sketcher/simple_sketch_shadow.gdshader" id="10_pydft"]
 [ext_resource type="PackedScene" uid="uid://cccdflexw520e" path="res://procedural_3d_grid/art/sophia/sophia.glb" id="11_6yesq"]
 
@@ -303,6 +304,12 @@ texture = SubResource("GradientTexture1D_24r4x")
 curve = SubResource("CurveTexture_m72oh")
 billboard = true
 _defaults_have_been_set = true
+
+[node name="Node3D" type="Node3D" parent="XROrigin3D/hand_right"]
+script = ExtResource("8_uwiqs")
+
+[node name="sophia" parent="XROrigin3D/hand_right/Node3D" instance=ExtResource("11_6yesq")]
+transform = Transform3D(0.0296712, 0, 0, 0, 0.0296712, 0, 0, 0, 0.0296712, 0, 0, 0)
 
 [node name="canvas" type="Node3D" parent="." node_paths=PackedStringArray("hand_left", "hand_right")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)

@@ -22,25 +22,31 @@ var smooth_factor: float = 0.9
 
 var _world_grab = WorldGrab.new()
 
+var target_transform: Transform3D = transform
 func _process(_delta: float) -> void:
-	var hand_left_force: float = hand_left.get_float("grip_force")
-	var hand_right_force: float = hand_right.get_float("grip_force")
+	var hand_left_force: float = hand_left.get_float("grip")
+	var hand_right_force: float = hand_right.get_float("grip")
 	
 	hand_left_force_decayed = hand_left_force * decay_factor
 	hand_right_force_decayed = hand_right_force * decay_factor
 
-	var target_transform: Transform3D
+	var delta_transform: Transform3D
 	if prev_hand_left_pressed && prev_hand_right_pressed:
-		target_transform = _world_grab.get_pinch_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
+		delta_transform = _world_grab.get_pinch_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
 	elif prev_hand_left_pressed:
-		target_transform = _world_grab.get_grab_transform(prev_hand_left_transform, hand_left.transform)
+		delta_transform = _world_grab.get_grab_transform(prev_hand_left_transform, hand_left.transform)
 	elif prev_hand_right_pressed:
-		target_transform = _world_grab.get_grab_transform(prev_hand_right_transform, hand_right.transform)
+		delta_transform = _world_grab.get_grab_transform(prev_hand_right_transform, hand_right.transform)
 	else:
-		target_transform = transform
+		delta_transform = Transform3D()
 
+	transform = target_transform * _world_grab.split_blend(Transform3D(), target_transform.affine_inverse() * transform, .8, .3, .2)
+	
+	target_transform = delta_transform * target_transform
+	
 	#transform = transform.interpolate_with(target_transform, lerp_factor * smooth_factor)
-	transform = _world_grab.split_blend(target_transform, Transform3D(), 1.0 - _delta * smooth_factor) * transform
+	#transform = _world_grab.split_blend(target_transform, Transform3D()) * transform
+	#transform = target_transform*transform
 
 	prev_hand_left_transform = hand_left.transform
 	prev_hand_right_transform = hand_right.transform

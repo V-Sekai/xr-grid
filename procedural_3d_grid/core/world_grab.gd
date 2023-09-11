@@ -16,7 +16,7 @@ class_name WorldGrab extends RefCounted
 
 ## The transform that takes one to the other. Intended for a one handed grab.
 func get_grab_transform(from : Transform3D, to : Transform3D) -> Transform3D:
-	return from.affine_inverse() * to
+	return to * from.affine_inverse()
 
 ## For orbitting around a central point, without scale, like spinning a globe.
 func get_orbit_transform(from_pivot : Vector3, from_b : Vector3, to_pivot : Vector3, to_b : Vector3) -> Transform3D:
@@ -26,18 +26,19 @@ func get_orbit_transform(from_pivot : Vector3, from_b : Vector3, to_pivot : Vect
 	
 	# Gather information on the shortest rotation
 	var axis : Vector3 = from_b.cross(to_b)
+	if axis == Vector3(): axis = Vector3.RIGHT
 	var angle : float = from_b.angle_to(to_b)
 
 	# Construct the transformation that orbits about the pivot, with no scale!
-	return Transform3D(Basis(axis, angle), to_pivot)
+	return Transform3D().translated(-from_pivot).rotated(axis.normalized(), angle).translated(to_pivot)
 
 ## This is a transformation which takes line (from_a,from_b) to line (to_a,to_b). It is analagous to pinch gesture on a touch screen.
 func get_pinch_transform(from_a : Vector3, from_b : Vector3, to_a : Vector3, to_b : Vector3) -> Transform3D:
-	var delta_scale : float = sqrt(to_b.dot(to_b) / from_b.dot(from_b))
+	var delta_scale : float = sqrt((to_b-to_a).length_squared() / (from_b-from_a).length_squared())
 	
 	# Orbit around pivot point a, and scale so that b is fixed in place.
 	# According to symmetry, it is the same as if a and b are swapped.
-	return get_orbit_transform(from_a, from_b, to_a, to_b) * Transform3D(Basis.from_scale(Vector3(1,1,1) * delta_scale))
+	return get_orbit_transform(from_a, from_b, to_a, to_b).translated(-to_a).scaled(Vector3.ONE * delta_scale).translated(to_a)
 
 ## Separable blending of position, rotation and scale. Fine tune smoothing for maximum comfort.
 ## [br]

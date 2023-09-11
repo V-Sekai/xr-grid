@@ -25,7 +25,7 @@ func _process(_delta: float) -> void:
 	var mesh: ArrayMesh = sketch_tool.canvas.get_node("strokes").mesh
 	if is_button_pressed("ax_button"):
 		_save_mesh(mesh)
-	if is_button_pressed("bx_button"):
+	if is_button_pressed("by_button"):
 		_load_mesh(mesh)
 
 func _save_mesh(mesh: ArrayMesh):
