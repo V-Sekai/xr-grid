@@ -20,6 +20,8 @@ var decay_factor: float = 0.95
 var lerp_factor: float = 0.6
 var smooth_factor: float = 0.9
 
+var _world_grab = WorldGrab.new()
+
 func _process(_delta: float) -> void:
 	var hand_left_force: float = hand_left.get_float("grip_force")
 	var hand_right_force: float = hand_right.get_float("grip_force")
@@ -28,17 +30,17 @@ func _process(_delta: float) -> void:
 	hand_right_force_decayed = hand_right_force * decay_factor
 
 	var target_transform: Transform3D
-
 	if prev_hand_left_pressed && prev_hand_right_pressed:
-		target_transform = pinch_transform(transform, prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
+		target_transform = _world_grab.get_pinch_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
 	elif prev_hand_left_pressed:
-		target_transform = hand_left.transform * prev_hand_left_transform.affine_inverse() * transform
+		target_transform = _world_grab.get_grab_transform(prev_hand_left_transform, hand_left.transform)
 	elif prev_hand_right_pressed:
-		target_transform = hand_right.transform * prev_hand_right_transform.affine_inverse() * transform
+		target_transform = _world_grab.get_grab_transform(prev_hand_right_transform, hand_right.transform)
 	else:
 		target_transform = transform
 
-	transform = transform.interpolate_with(target_transform, lerp_factor * smooth_factor)
+	#transform = transform.interpolate_with(target_transform, lerp_factor * smooth_factor)
+	transform = _world_grab.split_blend(target_transform, Transform3D(), 1.0 - _delta * smooth_factor) * transform
 
 	prev_hand_left_transform = hand_left.transform
 	prev_hand_right_transform = hand_right.transform
