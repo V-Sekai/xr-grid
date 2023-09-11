@@ -41,30 +41,28 @@ func get_pinch_transform(from_a : Vector3, from_b : Vector3, to_a : Vector3, to_
 	return get_orbit_transform(from_a, from_b, to_a, to_b).translated(-to_a).scaled(Vector3.ONE * delta_scale).translated(to_a)
 
 ## Separable blending of position, rotation and scale. Fine tune smoothing for maximum comfort.
-## [br]
-## [br]Weights of 0 are optimized to avoid unnecessary compute.
 func split_blend(
 		from : Transform3D,
 		to : Transform3D, 
 		pos_weight : float = 0.0, 
 		rot_weight : float = 0.0, 
-		scale_weight : float = 0.0) -> Transform3D:
+		scale_weight : float = 0.0,
+		from_pivot : Vector3 = Vector3(),
+		to_pivot : Vector3 = Vector3()) -> Transform3D:
 	
-	# Interpolate position
-	if pos_weight != 0.0:
-		from.origin = from.origin.lerp(to.origin, pos_weight)
+	var src_scale : Vector3 = from.basis.get_scale()
+	var src_rot : Quaternion = from.basis.get_rotation_quaternion()
 	
-	# Interpolate rotation
-	var from_rot : Quaternion = from.basis.get_rotation_quaternion()
-	from.basis = Basis(from_rot)
-	if rot_weight != 0.0:
-		var to_rot : Quaternion = to.basis.get_rotation_quaternion()
-		from.basis = Basis(from_rot.slerp(to_rot, rot_weight))
+	var dst_scale : Vector3 = to.basis.get_scale()
+	var dst_rot : Quaternion = to.basis.get_rotation_quaternion()
 	
-	# Interpolate scale
-	if scale_weight != 0.0:
-		var from_scale : Vector3 = from.basis.get_scale()
-		var to_scale : Vector3 = to.basis.get_scale()
-		from.basis *= Basis.from_scale(from_scale.lerp(to_scale, scale_weight))
+	var basis_inv : Basis = from.basis.inverse()
+	from.basis = Basis(src_rot.slerp(dst_rot, rot_weight).normalized()) * Basis.from_scale(src_scale.lerp(dst_scale, scale_weight))
+	
+	from_pivot = from_pivot.lerp(to_pivot, pos_weight)
+	
+	from.origin -= from_pivot
+	from.origin = from.basis * (basis_inv * from.origin)
+	from.origin += from_pivot
 	
 	return from

@@ -13,34 +13,38 @@ var prev_hand_right_transform: Transform3D
 var prev_hand_left_pressed: float = 0
 var prev_hand_right_pressed: float = 0
 
-var hand_left_force_decayed: float = 0
-var hand_right_force_decayed: float = 0
-
-var decay_factor: float = 0.95
-var lerp_factor: float = 0.6
-var smooth_factor: float = 0.9
-
 var _world_grab = WorldGrab.new()
 
 var target_transform: Transform3D = transform
 func _process(_delta: float) -> void:
-	var hand_left_force: float = hand_left.get_float("grip")
-	var hand_right_force: float = hand_right.get_float("grip")
-	
-	hand_left_force_decayed = hand_left_force * decay_factor
-	hand_right_force_decayed = hand_right_force * decay_factor
+	var hand_left_pressed: float = hand_left.get_float("grip")
+	var hand_right_pressed: float = hand_right.get_float("grip")
+
+	var from_pivot : Vector3
+	var to_pivot : Vector3
 
 	var delta_transform: Transform3D
 	if prev_hand_left_pressed && prev_hand_right_pressed:
+		from_pivot = prev_hand_left_transform.origin + prev_hand_right_transform.origin
+		to_pivot = hand_left.transform.origin + hand_right.transform.origin
+		
 		delta_transform = _world_grab.get_pinch_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
 	elif prev_hand_left_pressed:
+		from_pivot = prev_hand_left_transform.origin
+		to_pivot = hand_left.transform.origin
+		
 		delta_transform = _world_grab.get_grab_transform(prev_hand_left_transform, hand_left.transform)
 	elif prev_hand_right_pressed:
+		from_pivot = prev_hand_right_transform.origin
+		to_pivot = hand_right.transform.origin
+		
 		delta_transform = _world_grab.get_grab_transform(prev_hand_right_transform, hand_right.transform)
 	else:
+		from_pivot = Vector3()
+		to_pivot = Vector3()
 		delta_transform = Transform3D()
 
-	transform = target_transform * _world_grab.split_blend(Transform3D(), target_transform.affine_inverse() * transform, .8, .3, .2)
+	transform = target_transform * _world_grab.split_blend(Transform3D(), target_transform.affine_inverse() * transform, .8, .3, .2, from_pivot, to_pivot)
 	
 	target_transform = delta_transform * target_transform
 	
@@ -50,8 +54,8 @@ func _process(_delta: float) -> void:
 
 	prev_hand_left_transform = hand_left.transform
 	prev_hand_right_transform = hand_right.transform
-	prev_hand_left_pressed = hand_left_force_decayed
-	prev_hand_right_pressed = hand_right_force_decayed
+	prev_hand_left_pressed = hand_left_pressed
+	prev_hand_right_pressed = hand_right_pressed
 
 
 func pinch_transform(_transform: Transform3D, from_a: Vector3, from_b: Vector3, to_a: Vector3, to_b: Vector3) -> Transform3D:
