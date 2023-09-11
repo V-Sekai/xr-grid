@@ -20,3 +20,24 @@ func _process(_delta: float) -> void:
 	else:
 		sketch_tool.active = true
 		sketch_tool.pressure = hand_pressed * max_size
+	
+	# Basic save/load for debugging
+	var mesh: ArrayMesh = sketch_tool.canvas.get_node("strokes").mesh
+	if is_button_pressed("ax_button"):
+		_save_mesh(mesh)
+	if is_button_pressed("bx_button"):
+		_load_mesh(mesh)
+
+func _save_mesh(mesh: ArrayMesh):
+	print("saving mesh")
+	var result = ResourceSaver.save(mesh, "res://test_save.mesh")
+	if result != OK:
+		print("failed!")
+
+func _load_mesh(mesh: ArrayMesh):
+	print("loading mesh")
+	var result_mesh: ArrayMesh = ResourceLoader.load("res://test_save.mesh", "ArrayMesh")
+	
+	mesh.clear_surfaces()
+	for i in range(0,result_mesh.get_surface_count()):
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, result_mesh.surface_get_arrays(i))
