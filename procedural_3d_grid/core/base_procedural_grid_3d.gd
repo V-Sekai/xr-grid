@@ -93,5 +93,8 @@ func regenerate_mesh():
 			new_origin.z = float(i) / z_divisor
 			grid_transform.origin = new_origin
 			grid_transform.origin -= Vector3(1, 1, 1) * (points_per_dimension / 2.0 - 1.0)
+		else:
+			continue
+
 		multimesh.set_instance_transform(i, grid_transform)
 	print_verbose("Grid mesh has been regenerated")
