@@ -17,7 +17,9 @@ class_name SketchTool extends Node3D
 
 
 func _ready() -> void:
-	assert(canvas != null)
+	if canvas == null:
+		printerr("Cannot make the canvas ready.")
+		return
 
 	simple_sketch.target_mesh = canvas.get_node("strokes").mesh
 
