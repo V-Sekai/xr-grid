@@ -21,6 +21,7 @@ var grab_pivot : Vector3
 var delta_transform: Transform3D
 var target_transform: Transform3D = transform
 
+var damping: float = 6.0
 const max_pinch_time: float = 0.1 # sensitivity?
 
 enum Mode {
@@ -33,17 +34,26 @@ var state: Mode = Mode.NONE
 
 var left_hand_just_grabbed := BoolTimer.new()
 var right_hand_just_grabbed := BoolTimer.new()
+var left_hand_just_ungrabbed := BoolTimer.new()
+var right_hand_just_ungrabbed := BoolTimer.new()
 
 func _process(_delta: float) -> void:
 	var hand_left_grab: float = hand_left.get_float("grip")
 	var hand_right_grab: float = hand_right.get_float("grip")
 	
 	# Dampening
-	delta_transform = delta_transform.interpolate_with(Transform3D(), _delta*2.0)
-	
-	# Always ctivate pinching if both hands are grabbing within max_pinch_timer
+	delta_transform = delta_transform.interpolate_with(Transform3D(), damping * _delta)
+
 	if hand_left_grab and not prev_hand_left_grab: left_hand_just_grabbed.set_true(max_pinch_time)
 	if hand_right_grab and not prev_hand_right_grab: right_hand_just_grabbed.set_true(max_pinch_time)
+	
+	if not hand_left_grab and prev_hand_left_grab: left_hand_just_ungrabbed.set_true(max_pinch_time)
+	if not hand_right_grab and prev_hand_right_grab: right_hand_just_ungrabbed.set_true(max_pinch_time)
+	
+	#var allow_grab: bool = left_hand_just_grabbed.value and right_hand_just_grabbed.value
+	var allow_ungrab: bool = left_hand_just_ungrabbed.value and right_hand_just_ungrabbed.value
+	
+	# Always ctivate pinching if both hands are grabbing within max_pinch_timer
 	if left_hand_just_grabbed.value and right_hand_just_grabbed.value: state = Mode.PINCH
 	
 	# Always return to no grab if no hands are grabbing
@@ -51,9 +61,9 @@ func _process(_delta: float) -> void:
 	
 	match state:
 		Mode.NONE:
-			if not left_hand_just_grabbed && hand_left_grab:
+			if not left_hand_just_grabbed.value && hand_left_grab:
 				state = Mode.GRAB
-			elif not right_hand_just_grabbed && hand_right_grab:
+			elif not right_hand_just_grabbed.value && hand_right_grab:
 				state = Mode.GRAB
 			
 		Mode.GRAB:
@@ -73,7 +83,7 @@ func _process(_delta: float) -> void:
 				delta_transform = _world_grab.get_grab_transform(prev_hand_right_transform, hand_right.transform)
 			
 		Mode.PINCH:
-			if not (hand_left_grab and hand_right_grab):
+			if not (hand_left_grab and hand_right_grab) and allow_ungrab:
 				state = Mode.GRAB
 			
 			from_pivot = (prev_hand_left_transform.origin + prev_hand_right_transform.origin)/2.0
