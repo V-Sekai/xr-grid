@@ -50,6 +50,12 @@ func split_blend(
 		from_pivot : Vector3 = Vector3(),
 		to_pivot : Vector3 = Vector3()) -> Transform3D:
 	
+	var new_from : Transform3D = Transform3D(from.basis, from_pivot)
+	var new_to : Transform3D = Transform3D(to.basis, to_pivot)
+	new_to = new_from.interpolate_with(new_to, pos_weight)
+	
+	return get_grab_transform(new_from, new_to) * from #from.interpolate_with(to, pos_weight)
+	
 	from.origin -= from_pivot
 	to.origin -= from_pivot
 	
@@ -59,12 +65,15 @@ func split_blend(
 	var dst_scale : Vector3 = to.basis.get_scale()
 	var dst_rot : Quaternion = to.basis.get_rotation_quaternion()
 	
-	from.basis = Basis( src_rot.slerp(dst_rot, rot_weight) ) * Basis.from_scale(src_scale.lerp(dst_scale, scale_weight))
-	from.origin = from.origin.slerp(to.origin, pos_weight)
+	var target_basis = Basis( src_rot.slerp(dst_rot, rot_weight) ) * Basis.from_scale(src_scale.lerp(dst_scale, scale_weight))
+	#to.basis = Basis( src_rot.slerp(dst_rot, rot_weight) ) * Basis.from_scale(src_scale.lerp(dst_scale, scale_weight))
 	
-	#var delta_rot_scale : Basis = Basis( Quaternion().slerp(dst_rot * src_rot.inverse(), rot_weight) ) * Basis.from_scale(Vector3.ONE.lerp(dst_scale/src_scale, scale_weight))
+	from.origin = (target_basis * from.basis.inverse()) * from.origin
+	from.basis = target_basis
+	
+	#var delta_rot_scale : Basis = Basis( Quaternion().slerp(dst_rot * src_rot.inverse(), rot_weight).normalized() ) * Basis.from_scale(Vector3.ONE.lerp(dst_scale/src_scale, scale_weight))
 	#from = Transform3D(delta_rot_scale) * from
-	#from = from.translated((to.origin - from.origin) * pos_weight)
+	from = from.translated((to.origin - from.origin) * pos_weight)
 	
 	#var delta_transform : Transform3D = Transform3D(delta_rot_scale) #Transform3D(delta_rot_scale, Vector3().lerp(to.origin - from.origin, pos_weight))
 
