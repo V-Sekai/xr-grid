@@ -60,10 +60,11 @@ func split_blend(
 	var dst_rot : Quaternion = to.basis.get_rotation_quaternion()
 	
 	var delta_rot_scale : Basis = Basis( Quaternion().slerp(dst_rot * src_rot.inverse(), rot_weight) ) * Basis.from_scale(Vector3.ONE.lerp(dst_scale/src_scale, scale_weight))
-	var delta_transform : Transform3D = Transform3D(delta_rot_scale, Vector3().lerp(to.origin - from.origin, pos_weight))
-	
-	from = delta_transform * from
-	
+	from = Transform3D(delta_rot_scale) * from
+	from = from.translated((to.origin - from.origin) * pos_weight)
+
+	#var delta_transform : Transform3D = Transform3D(delta_rot_scale) #Transform3D(delta_rot_scale, Vector3().lerp(to.origin - from.origin, pos_weight))
+
 	from.origin += from_pivot
 	to.origin += from_pivot
 	
