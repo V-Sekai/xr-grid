@@ -25,10 +25,10 @@ var damping: float = 6.0
 const max_pinch_time: float = 0.1 # sensitivity?
 
 enum Mode {
-	NONE, # One handed grab
-	GRAB, # One handed grab
-	PINCH, # Two handed grab
-	ORBIT, # Like spinning a globe
+	NONE, 
+	GRAB,
+	PINCH,
+	ORBIT,
 }
 var state: Mode = Mode.NONE
 
@@ -37,75 +37,54 @@ var right_hand_just_grabbed := BoolTimer.new()
 var left_hand_just_ungrabbed := BoolTimer.new()
 var right_hand_just_ungrabbed := BoolTimer.new()
 
-func _process(_delta: float) -> void:
+func _process(delta_time: float) -> void:
 	var hand_left_grab: float = hand_left.get_float("grip")
 	var hand_right_grab: float = hand_right.get_float("grip")
 	
 	# Dampening
-	delta_transform = delta_transform.interpolate_with(Transform3D(), damping * _delta)
+	delta_transform = delta_transform.interpolate_with(Transform3D(), damping * delta_time)
 
-	if hand_left_grab and not prev_hand_left_grab: left_hand_just_grabbed.set_true(max_pinch_time)
-	if hand_right_grab and not prev_hand_right_grab: right_hand_just_grabbed.set_true(max_pinch_time)
+	update_hand_grab_status(hand_left_grab, prev_hand_left_grab, left_hand_just_grabbed, left_hand_just_ungrabbed)
+	update_hand_grab_status(hand_right_grab, prev_hand_right_grab, right_hand_just_grabbed, right_hand_just_ungrabbed)
 	
-	if not hand_left_grab and prev_hand_left_grab: left_hand_just_ungrabbed.set_true(max_pinch_time)
-	if not hand_right_grab and prev_hand_right_grab: right_hand_just_ungrabbed.set_true(max_pinch_time)
+	var both_hands_just_ungrabbed: bool = left_hand_just_ungrabbed.value and right_hand_just_ungrabbed.value
 	
-	#var allow_grab: bool = left_hand_just_grabbed.value and right_hand_just_grabbed.value
-	var allow_ungrab: bool = left_hand_just_ungrabbed.value and right_hand_just_ungrabbed.value
-	
-	# Always ctivate pinching if both hands are grabbing within max_pinch_timer
-	if left_hand_just_grabbed.value and right_hand_just_grabbed.value: state = Mode.PINCH
-	
-	# Always return to no grab if no hands are grabbing
-	if not (hand_left_grab or hand_right_grab): state = Mode.NONE
+	if both_hands_just_grabbed(): state = Mode.PINCH
+	if not (hand_left_grab or hand_right_grab): 
+		state = Mode.NONE
+		delta_transform = Transform3D()  # Reset delta_transform when not grabbing
 	
 	match state:
 		Mode.NONE:
-			if not left_hand_just_grabbed.value && hand_left_grab:
+			if hand_left_grab and not left_hand_just_grabbed.value:
 				state = Mode.GRAB
-			elif not right_hand_just_grabbed.value && hand_right_grab:
+			elif hand_right_grab and not right_hand_just_grabbed.value:
 				state = Mode.GRAB
 			
 		Mode.GRAB:
 			if hand_left_grab and hand_right_grab:
 				state = Mode.ORBIT
 			
-			if hand_left_grab:
-				from_pivot = prev_hand_left_transform.origin
-				to_pivot = prev_hand_left_transform.origin
-				
-				delta_transform = _world_grab.get_grab_transform(prev_hand_left_transform, hand_left.transform)
-			
-			if hand_right_grab:
-				from_pivot = prev_hand_right_transform.origin
-				to_pivot = prev_hand_right_transform.origin
-				
-				delta_transform = _world_grab.get_grab_transform(prev_hand_right_transform, hand_right.transform)
+			set_pivot_and_transform(hand_left_grab, prev_hand_left_transform, hand_left.transform)
+			set_pivot_and_transform(hand_right_grab, prev_hand_right_transform, hand_right.transform)
 			
 		Mode.PINCH:
-			if not (hand_left_grab and hand_right_grab) and allow_ungrab:
+			if not (hand_left_grab and hand_right_grab) and both_hands_just_ungrabbed:
 				state = Mode.GRAB
 			
-			from_pivot = (prev_hand_left_transform.origin + prev_hand_right_transform.origin)/2.0
-			to_pivot = (hand_left.transform.origin + hand_right.transform.origin)/2.0
-			
-			delta_transform = _world_grab.get_pinch_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
+			set_pinch_pivot_and_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
 			
 		Mode.ORBIT:
 			if not (hand_left_grab and hand_right_grab):
 				state = Mode.GRAB
 			
-			from_pivot = prev_hand_left_transform.origin
-			to_pivot = prev_hand_right_transform.origin
-			
-			delta_transform = _world_grab.get_orbit_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
+			set_orbit_pivot_and_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
 	
 	# Integrate motion
 	target_transform = delta_transform * target_transform
 	
 	# Smoothing
 	transform = _world_grab.split_blend(transform, target_transform, .3, .1, .1, transform * target_transform.affine_inverse() * to_pivot, to_pivot)
-	#transform = target_transform
 	
 	# Pass data required for the next frame
 	prev_hand_left_transform = hand_left.transform
@@ -113,35 +92,29 @@ func _process(_delta: float) -> void:
 	prev_hand_left_grab = hand_left_grab
 	prev_hand_right_grab = hand_right_grab
 
-'''delta_transform = delta_transform.interpolate_with(Transform3D(), _delta*2.0)
-	if hand_left_pressed && hand_right_pressed && both_hands_just_pressed.value:
-		from_pivot = (prev_hand_left_transform.origin + prev_hand_right_transform.origin)/2.0
-		to_pivot = (hand_left.transform.origin + hand_right.transform.origin)/2.0
-		
-		delta_transform = _world_grab.get_pinch_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
 
-	elif hand_left_pressed:
-		from_pivot = prev_hand_left_transform.origin
-		to_pivot = hand_left.transform.origin
-		
-		delta_transform = _world_grab.get_grab_transform(prev_hand_left_transform, hand_left.transform)
-		
-		if not prev_hand_left_pressed: both_hands_just_pressed.set_true(max_pinch_time)
-	elif hand_right_pressed:
-		from_pivot = prev_hand_right_transform.origin
-		to_pivot = hand_right.transform.origin
-		
-		delta_transform = _world_grab.get_grab_transform(prev_hand_right_transform, hand_right.transform)
-		
-		if not prev_hand_right_pressed: both_hands_just_pressed.set_true(max_pinch_time)
-	else:
-		#from_pivot = Vector3()
-		#to_pivot = Vector3()
-		#delta_transform = Transform3D()
-		pass
+func both_hands_just_grabbed() -> bool:
+	return left_hand_just_grabbed.value and right_hand_just_grabbed.value
 
-	target_transform = delta_transform * target_transform
-	
-	grab_pivot = target_transform.affine_inverse() * to_pivot
-	transform = _world_grab.split_blend(transform, target_transform, .3, .1, .1, transform * target_transform.affine_inverse() * to_pivot, to_pivot)
-	#transform = target_transform'''
+
+func update_hand_grab_status(hand_grab: float, prev_hand_grab: float, just_grabbed: BoolTimer, just_ungrabbed: BoolTimer) -> void:
+	if hand_grab and not prev_hand_grab: 
+		just_grabbed.set_true(max_pinch_time)
+	if not hand_grab and prev_hand_grab: 
+		just_ungrabbed.set_true(max_pinch_time)
+
+func set_pivot_and_transform(hand_grab: float, prev_hand_transform: Transform3D, hand_transform: Transform3D) -> void:
+	if hand_grab:
+		from_pivot = prev_hand_transform.origin
+		to_pivot = prev_hand_transform.origin
+		delta_transform = _world_grab.get_grab_transform(prev_hand_transform, hand_transform)
+
+func set_pinch_pivot_and_transform(prev_hand_left_origin: Vector3, prev_hand_right_origin: Vector3, hand_left_origin: Vector3, hand_right_origin: Vector3) -> void:
+	from_pivot = (prev_hand_left_origin + prev_hand_right_origin)/2.0
+	to_pivot = (hand_left_origin + hand_right_origin)/2.0
+	delta_transform = _world_grab.get_pinch_transform(prev_hand_left_origin, prev_hand_right_origin, hand_left_origin, hand_right_origin)
+
+func set_orbit_pivot_and_transform(prev_hand_left_origin: Vector3, prev_hand_right_origin: Vector3, hand_left_origin: Vector3, hand_right_origin: Vector3) -> void:
+	from_pivot = prev_hand_left_origin
+	to_pivot = prev_hand_right_origin
+	delta_transform = _world_grab.get_orbit_transform(prev_hand_left_origin, prev_hand_right_origin, hand_left_origin, hand_right_origin)
