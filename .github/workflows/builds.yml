@@ -182,6 +182,7 @@ jobs:
           mkdir -p .godot/editor .godot/imported export_${{ matrix.deploy-platform }}
           chmod +x ${{ matrix.bin }}
           ${{ matrix.bin }} --headless --xr-mode off --export-pack ${{ matrix.export-platform }}  `pwd`/${{ env.GAME_NAME }}${{ matrix.deploy-platform }}.pck --path . || true
+        timeout-minutes: 10
         shell: bash
 
       - name: Prepare artifacts
