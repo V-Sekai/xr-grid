@@ -14,3 +14,15 @@ data_*/
 .DS_Store
 
 export/
+
+addons/vsk_version/build_constants.gd.uid
+
+addons/vsk_version/build_constants.gd
+
+addons/vsk_version/vsk_version.gd.uid
+
+commandlinetools-linux-8092744_latest.zip
+
+jdk/
+
+cmdline-tools/
