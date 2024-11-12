@@ -1,4 +1,4 @@
-url := "https://github.com/V-Sekai/world-editor/releases/download/latest.v-sekai-editor-171/v-sekai-world.zip"
+url := "https://github.com/V-Sekai/world-editor/releases/download/latest.v-sekai-editor-181/v-sekai-world.zip"
 output := "v-sekai-world.zip"
 extract-dir := "export"
 sha256 := "bcef4c5e55b84fdd7613d53f2bf00bad877eb6e49bf05b916774001cbb7bda80"
