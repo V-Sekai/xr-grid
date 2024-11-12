@@ -1,7 +1,7 @@
 url := "https://github.com/V-Sekai/world-editor/releases/download/latest.v-sekai-editor-181/v-sekai-world.zip"
 output := "v-sekai-world.zip"
 extract-dir := "export"
-sha256 := "bcef4c5e55b84fdd7613d53f2bf00bad877eb6e49bf05b916774001cbb7bda80"
+sha256 := "964ebb46bfd3ac6e88e572449c845b42ebee05f82df9e75ca0e446b19181e754"
 app-path := "{{extract-dir}}/godot_macos_editor_double.app"
 executable-path := "{{app-path}}/Contents/MacOS/Godot"
 
