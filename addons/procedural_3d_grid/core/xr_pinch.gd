@@ -22,7 +22,7 @@ var delta_transform: Transform3D
 var target_transform: Transform3D = transform
 
 var damping: float = 6.0
-const max_pinch_time: float = 0.1  # sensitivity?
+const max_pinch_time: float = 0.2  # sensitivity?
 
 enum Mode {
 	NONE,
