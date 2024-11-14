@@ -191,22 +191,9 @@ func set_pivot_and_transform(hand_grab: float, prev_hand_transform: Transform3D,
 		delta_transform = _world_grab.get_grab_transform(prev_hand_transform, hand_transform)
 
 func set_pinch_pivot_and_transform(prev_hand_left_origin: Vector3, prev_hand_right_origin: Vector3, hand_left_origin: Vector3, hand_right_origin: Vector3) -> void:
-	var prev_distance = prev_hand_left_origin.distance_to(prev_hand_right_origin)
-	var current_distance = hand_left_origin.distance_to(hand_right_origin)
-
-	if current_distance > prev_distance:
-		# Zoom out
-		from_pivot = (prev_hand_left_origin + prev_hand_right_origin) / 2.0
-		to_pivot = (hand_left_origin + hand_right_origin) / 2.0
-		delta_transform = _world_grab.get_pinch_transform(prev_hand_left_origin, prev_hand_right_origin, hand_left_origin, hand_right_origin)
-	elif current_distance < prev_distance:
-		# Zoom in
-		from_pivot = (prev_hand_left_origin + prev_hand_right_origin) / 2.0
-		to_pivot = (hand_left_origin + hand_right_origin) / 2.0
-		delta_transform = _world_grab.get_pinch_transform(prev_hand_left_origin, prev_hand_right_origin, hand_left_origin, hand_right_origin)
-	else:
-		# No zoom
-		delta_transform = Transform3D()
+	from_pivot = (prev_hand_left_origin + prev_hand_right_origin) / 2.0
+	to_pivot = (hand_left_origin + hand_right_origin) / 2.0
+	delta_transform = _world_grab.get_pinch_transform(prev_hand_left_origin, prev_hand_right_origin, hand_left_origin, hand_right_origin)
 
 func set_orbit_pivot_and_transform(prev_hand_left_origin: Vector3, prev_hand_right_origin: Vector3, hand_left_origin: Vector3, hand_right_origin: Vector3) -> void:
 	from_pivot = prev_hand_left_origin
