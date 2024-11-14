@@ -46,6 +46,8 @@ var hand_right_grab_debounce_timer: float = 0.0
 var last_hand_left_grab_state: bool = false
 var last_hand_right_grab_state: bool = false
 
+@export var linear_dampening: float = 0.45
+@export var angular_dampening: float = 0.45
 
 func _process(delta_time: float) -> void:
 	var hand_left_grab: float = hand_left.get_float("grip")
@@ -64,41 +66,35 @@ func _process(delta_time: float) -> void:
 
 	if both_hands_just_grabbed():
 		state = Mode.PINCH
-	if not (hand_left_grab or hand_right_grab):
-		state = Mode.NONE
-		delta_transform = Transform3D()  # Reset delta_transform when not grabbing
-		apply_velocity(delta_time)  # Apply stored velocities when not grabbing
+
+	if not (hand_left_grab and hand_right_grab):
+		if state != Mode.NONE:
+			state = Mode.NONE
+			delta_transform = Transform3D()  # Reset delta_transform when not grabbing
+			apply_velocity(delta_time)  # Apply stored velocities when not grabbing
 
 	match state:
 		Mode.NONE:
-			if hand_left_grab and not left_hand_just_grabbed.value:
-				state = Mode.GRAB
-			elif hand_right_grab and not right_hand_just_grabbed.value:
-				state = Mode.GRAB
-
-		Mode.GRAB:
-			if hand_left_grab and hand_right_grab:
-				state = Mode.ORBIT
-
-			set_pivot_and_transform(hand_left_grab, prev_hand_left_transform, hand_left.transform)
-			set_pivot_and_transform(hand_right_grab, prev_hand_right_transform, hand_right.transform)
-			store_velocity(prev_hand_left_transform, hand_left.transform, delta_time)
+			# Do nothing when no hands are grabbing
+			pass
 
 		Mode.PINCH:
-			if not (hand_left_grab and hand_right_grab) and both_hands_just_ungrabbed:
-				state = Mode.GRAB
+			if not (hand_left_grab and hand_right_grab):
+				state = Mode.NONE
 
-			set_pinch_pivot_and_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
-			store_velocity(prev_hand_left_transform, hand_left.transform, delta_time)
-			store_velocity(prev_hand_right_transform, hand_right.transform, delta_time)
+			if hand_left_grab and hand_right_grab and hand_left_grab_debounce_timer >= debounce_duration and hand_right_grab_debounce_timer >= debounce_duration:
+				set_pinch_pivot_and_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
+				store_velocity(prev_hand_left_transform, hand_left.transform, delta_time)
+				store_velocity(prev_hand_right_transform, hand_right.transform, delta_time)
 
 		Mode.ORBIT:
 			if not (hand_left_grab and hand_right_grab):
-				state = Mode.GRAB
+				state = Mode.NONE
 
-			set_orbit_pivot_and_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
-			store_velocity(prev_hand_left_transform, hand_left.transform, delta_time)
-			store_velocity(prev_hand_right_transform, hand_right.transform, delta_time)
+			if hand_left_grab and hand_right_grab and hand_left_grab_debounce_timer >= debounce_duration and hand_right_grab_debounce_timer >= debounce_duration:
+				set_orbit_pivot_and_transform(prev_hand_left_transform.origin, prev_hand_right_transform.origin, hand_left.transform.origin, hand_right.transform.origin)
+				store_velocity(prev_hand_left_transform, hand_left.transform, delta_time)
+				store_velocity(prev_hand_right_transform, hand_right.transform, delta_time)
 
 	# Integrate motion
 	target_transform = delta_transform * target_transform
@@ -111,7 +107,6 @@ func _process(delta_time: float) -> void:
 	prev_hand_right_transform = hand_right.transform
 	prev_hand_left_grab = hand_left_grab
 	prev_hand_right_grab = hand_right_grab
-
 
 func handle_debounce(current_grab_value: float, delta_time: float, is_left_hand: bool) -> void:
 	var grab_debounce_timer: float = hand_right_grab_debounce_timer
@@ -145,11 +140,6 @@ func handle_debounce(current_grab_value: float, delta_time: float, is_left_hand:
 	else:
 		hand_right_grab_debounce_timer = grab_debounce_timer
 
-
-@export var linear_dampening: float = 0.45
-@export var angular_dampening: float = 0.45
-
-
 func apply_velocity(delta_time: float) -> void:
 	# Apply linear damping, reducing the velocity by the damping factor each frame
 	linear_velocity *= (1.0 - linear_dampening)
@@ -166,7 +156,6 @@ func apply_velocity(delta_time: float) -> void:
 
 		# Apply angular damping to reduce angular speed over time
 		angular_velocity *= (1.0 - angular_dampening)
-
 
 func store_velocity(prev_hand_transform: Transform3D, hand_transform: Transform3D, delta_time: float) -> void:
 	if delta_time > 0:
@@ -186,10 +175,8 @@ func store_velocity(prev_hand_transform: Transform3D, hand_transform: Transform3
 		# Here the angular velocity will be the rotation axis scaled by the amount of rotation over time.
 		angular_velocity = rotation_axis * (rotation_amount / delta_time)
 
-
 func both_hands_just_grabbed() -> bool:
 	return left_hand_just_grabbed.value and right_hand_just_grabbed.value
-
 
 func update_hand_grab_status(hand_grab: float, prev_hand_grab: float, just_grabbed: BoolTimer, just_ungrabbed: BoolTimer) -> void:
 	if hand_grab and not prev_hand_grab:
@@ -197,19 +184,23 @@ func update_hand_grab_status(hand_grab: float, prev_hand_grab: float, just_grabb
 	if not hand_grab and prev_hand_grab:
 		just_ungrabbed.set_true(max_pinch_time)
 
-
 func set_pivot_and_transform(hand_grab: float, prev_hand_transform: Transform3D, hand_transform: Transform3D) -> void:
 	if hand_grab:
 		from_pivot = prev_hand_transform.origin
 		to_pivot = prev_hand_transform.origin
 		delta_transform = _world_grab.get_grab_transform(prev_hand_transform, hand_transform)
 
-
 func set_pinch_pivot_and_transform(prev_hand_left_origin: Vector3, prev_hand_right_origin: Vector3, hand_left_origin: Vector3, hand_right_origin: Vector3) -> void:
-	from_pivot = (prev_hand_left_origin + prev_hand_right_origin) / 2.0
-	to_pivot = (hand_left_origin + hand_right_origin) / 2.0
-	delta_transform = _world_grab.get_pinch_transform(prev_hand_left_origin, prev_hand_right_origin, hand_left_origin, hand_right_origin)
-
+	var prev_distance = prev_hand_left_origin.distance_to(prev_hand_right_origin)
+	var current_distance = hand_left_origin.distance_to(hand_right_origin)
+	var distance_change = current_distance - prev_distance
+	var deadzone_threshold: float = 0.01
+	if abs(distance_change) > deadzone_threshold:
+		from_pivot = (prev_hand_left_origin + prev_hand_right_origin) / 2.0
+		to_pivot = (hand_left_origin + hand_right_origin) / 2.0
+		delta_transform = _world_grab.get_pinch_transform(prev_hand_left_origin, prev_hand_right_origin, hand_left_origin, hand_right_origin)
+	else:
+		delta_transform = Transform3D()
 
 func set_orbit_pivot_and_transform(prev_hand_left_origin: Vector3, prev_hand_right_origin: Vector3, hand_left_origin: Vector3, hand_right_origin: Vector3) -> void:
 	from_pivot = prev_hand_left_origin
