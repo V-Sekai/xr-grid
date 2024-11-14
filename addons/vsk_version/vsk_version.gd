@@ -6,8 +6,24 @@
 @tool
 extends Node
 
-const build_constants_const = preload("build_constants.gd")
+var build_constants = null
 
+func _ready():
+	if ResourceLoader.exists("build_constants.gd"):
+		build_constants = preload("build_constants.gd")
+	else:
+		print("build_constants.gd does not exist")
 
-static func get_build_label() -> String:
-	return build_constants_const.BUILD_DATE_STR + "\n" + build_constants_const.BUILD_LABEL
+func get_build_label() -> String:
+	var build_label = "DEVELOPER_BUILD"
+	var build_date_str = "Build Date"
+	var build_unix_time = -1
+	
+	if build_constants and build_constants.has("BUILD_LABEL"):
+		build_label = build_constants.BUILD_LABEL
+	if build_constants and build_constants.has("BUILD_DATE_STR"):
+		build_date_str = build_constants.BUILD_DATE_STR
+	if build_constants and build_constants.has("BUILD_UNIX_TIME"):
+		build_unix_time = build_constants.BUILD_UNIX_TIME
+	
+	return build_date_str + "\n" + build_label

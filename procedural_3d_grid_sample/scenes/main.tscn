@@ -1,16 +1,16 @@
 [gd_scene load_steps=41 format=3 uid="uid://bg6gj8x7d3mrl"]
 
-[ext_resource type="Script" path="res://addons/procedural_3d_grid/core/hand.gd" id="2_bpl2v"]
-[ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
-[ext_resource type="Shader" path="res://addons/GPUTrail-main/shaders/trail_draw_pass.gdshader" id="3_biyvx"]
-[ext_resource type="Script" path="res://addons/procedural_3d_grid/core/xr_origin.gd" id="3_p8s7d"]
-[ext_resource type="Script" path="res://addons/procedural_3d_grid/core/xr_pinch.gd" id="4_4qf3o"]
-[ext_resource type="Script" path="res://addons/procedural_3d_grid/core/simple_sketcher/sketch_tool.gd" id="5_uqwsl"]
-[ext_resource type="Script" path="res://addons/GPUTrail-main/GPUTrail3D.gd" id="6_dqij4"]
-[ext_resource type="Shader" path="res://addons/procedural_3d_grid/core/simple_sketcher/simple_sketch.gdshader" id="6_wgf7r"]
+[ext_resource type="Script" uid="uid://bhgqer41udrla" path="res://addons/procedural_3d_grid/core/hand.gd" id="2_bpl2v"]
+[ext_resource type="Shader" uid="uid://nqhuvjyl5bf4" path="res://addons/GPUTrail-main/shaders/trail.gdshader" id="2_rl0re"]
+[ext_resource type="Shader" uid="uid://b35htbko4hv85" path="res://addons/GPUTrail-main/shaders/trail_draw_pass.gdshader" id="3_biyvx"]
+[ext_resource type="Script" uid="uid://cqeyvdcoi37qr" path="res://addons/procedural_3d_grid/core/xr_origin.gd" id="3_p8s7d"]
+[ext_resource type="Script" uid="uid://c351cyh3u2n31" path="res://addons/procedural_3d_grid/core/xr_pinch.gd" id="4_4qf3o"]
+[ext_resource type="Script" uid="uid://dl6f33628oxnt" path="res://addons/procedural_3d_grid/core/simple_sketcher/sketch_tool.gd" id="5_uqwsl"]
+[ext_resource type="Script" uid="uid://bjpqewbtgif6n" path="res://addons/GPUTrail-main/GPUTrail3D.gd" id="6_dqij4"]
+[ext_resource type="Shader" uid="uid://c46ssct7fj6pj" path="res://addons/procedural_3d_grid/core/simple_sketcher/simple_sketch.gdshader" id="6_wgf7r"]
 [ext_resource type="PackedScene" uid="uid://ye52hc0t6bue" path="res://addons/procedural_3d_grid/core/procedural_grid_3d.tscn" id="6_yejl2"]
-[ext_resource type="Script" path="res://addons/procedural_3d_grid/core/follow_test.gd" id="8_uwiqs"]
-[ext_resource type="Shader" path="res://addons/procedural_3d_grid/core/simple_sketcher/simple_sketch_shadow.gdshader" id="10_pydft"]
+[ext_resource type="Script" uid="uid://18xcph2o0pci" path="res://addons/procedural_3d_grid/core/follow_test.gd" id="8_uwiqs"]
+[ext_resource type="Shader" uid="uid://b2cjphncghsi8" path="res://addons/procedural_3d_grid/core/simple_sketcher/simple_sketch_shadow.gdshader" id="10_pydft"]
 [ext_resource type="PackedScene" uid="uid://cccdflexw520e" path="res://procedural_3d_grid_sample/art/sophia/sophia.glb" id="11_6yesq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hf7ak"]
@@ -41,10 +41,10 @@ gradient = SubResource("Gradient_y8ofu")
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("3_biyvx")
-shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-shader_parameter/flags = 4
 shader_parameter/tex = SubResource("GradientTexture1D_g1tsk")
 shader_parameter/curve = SubResource("CurveTexture_m72oh")
+shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/flags = 4
 
 [sub_resource type="QuadMesh" id="QuadMesh_5hune"]
 material = SubResource("ShaderMaterial_tj13k")
@@ -195,10 +195,10 @@ gradient = SubResource("Gradient_x6w7l")
 resource_local_to_scene = true
 render_priority = 0
 shader = SubResource("Shader_urvn5")
-shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
-shader_parameter/flags = 4
 shader_parameter/tex = SubResource("GradientTexture1D_24r4x")
 shader_parameter/curve = SubResource("CurveTexture_m72oh")
+shader_parameter/emmission_transform = Projection(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1)
+shader_parameter/flags = 4
 
 [sub_resource type="QuadMesh" id="QuadMesh_v1e26"]
 material = SubResource("ShaderMaterial_sw5rf")
