@@ -10,7 +10,7 @@ var build_constants = null
 
 func _ready():
 	if ResourceLoader.exists("build_constants.gd"):
-		build_constants = preload("build_constants.gd")
+		build_constants = load("build_constants.gd").new()
 	else:
 		print("build_constants.gd does not exist")
 
