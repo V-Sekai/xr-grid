@@ -1,11 +1,11 @@
 defmodule BuildScript do
-    @url "https://github.com/V-Sekai/world-editor/releases/download/latest.v-sekai-editor-187/v-sekai-world.zip"
+    @url "https://github.com/V-Sekai/world-godot/releases/download/latest.v-sekai-editor-2/v-sekai-world.zip"
     @output "v-sekai-world.zip"
     @extract_dir "export"
     @extract_dir_extracted "#{@extract_dir}/temp"
     @os_family :os.type()
     @project_name "xr_grid"
-    @expected_hash "F7AB549A676C52DD47F9D74C9308EBBE447ABFA1513C7E563B3C15809C0CE3E3"
+    @expected_hash "657529B71E0BFF9500265FEE8C4A932E58A7FAC87CB1600F851ABA7C56FC15E6"
 
     def all do
         pending_files_to_delete = editor_download()
@@ -110,16 +110,16 @@ defmodule BuildScript do
     def export_stage do
         editor_path = case @os_family do
             {:win32, :nt} ->
-                "#{@extract_dir_extracted}/godot.windows.editor.double.x86_64.llvm.exe"
+                Path.expand("#{@extract_dir_extracted}/godot.windows.editor.double.x86_64.llvm.exe")
             {:unix, :darwin} ->
-                "#{@extract_dir_extracted}/godot.macos.editor.double.arm64"
+                Path.expand("#{@extract_dir_extracted}/godot.macos.editor.double.arm64")
             {:unix, _} ->
-                "#{@extract_dir_extracted}/godot.linux.editor.double.x86_64"
+                Path.expand("#{@extract_dir_extracted}/godot.linux.editor.double.x86_64")
         end
 
         if File.exists?(editor_path) do
             File.chmod(editor_path, 0o755)
-            version = System.cmd(editor_path, ["--version"]) |> elem(0) |> String.trim()
+            version = System.cmd(editor_path, ["--headless", "--version"]) |> elem(0) |> String.trim()
             platforms = [
                 {"windows", "x86_64"},
                 {"linuxbsd", "x86_64"},
@@ -132,6 +132,7 @@ defmodule BuildScript do
             end
         else
             IO.puts("Editor path not found: #{editor_path}")
+            exit(:normal)
         end
     end
 
@@ -207,30 +208,32 @@ defmodule BuildScript do
         File.cp!(debug_file, "#{templatedir}/#{debug_file_name}", force: true)
         File.cp!(release_file, "#{templatedir}/#{release_file_name}", force: true)
     end
-
     def export_platform(from_platform, from_arch, target_platform, target_arch) do
         File.rm_rf!("#{@extract_dir}/export_#{target_platform}_#{target_arch}")
         File.mkdir_p!("#{@extract_dir}/export_#{target_platform}_#{target_arch}")
-
-        editor_file = if from_platform == "windows" and File.exists?("#{@extract_dir_extracted}/godot.#{from_platform}.editor.double.#{from_arch}.llvm.exe") do
-            "#{@extract_dir_extracted}/godot.#{from_platform}.editor.double.#{from_arch}.llvm.exe"
-        else
-            "#{@extract_dir_extracted}/godot.#{from_platform}.editor.double.#{from_arch}"
+        editor_file = cond do
+            from_platform == "windows" and File.exists?("#{@extract_dir_extracted}/godot.#{from_platform}.editor.double.#{from_arch}.llvm.exe") ->
+                "#{@extract_dir_extracted}/godot.#{from_platform}.editor.double.#{from_arch}.llvm.exe"
+            from_platform == "macos" and File.exists?("#{@extract_dir_extracted}/godot.macos.editor.double.arm64") ->
+                "#{@extract_dir_extracted}/godot.macos.editor.double.arm64"
+            true ->
+                "#{@extract_dir_extracted}/godot.#{from_platform}.editor.double.#{from_arch}"
         end
-        env = [{"ANDROID_SDK_ROOT", "#{File.cwd!()}/android_sdk"}, {"JAVA_HOME", "#{File.cwd!()}/jdk"}]
-        arguments = ["--headless", "--path", ".", "--import"]
-        System.cmd(editor_file, arguments, env: env)
+        File.chmod(editor_file, 0o755)
+        pwd = Path.dirname(__ENV__.file)
+        arguments = ["--headless", "--path", pwd, "--import", "-e"]
+        System.cmd("bash", ["-c", "#{editor_file} #{Enum.join(arguments, " ")}"], stderr_to_stdout: true)
 
         output_file = "#{@extract_dir}/export_#{target_platform}_#{target_arch}/#{@project_name}"
         output_file = if target_platform == "windows", do: output_file <> ".exe", else: output_file
 
-        arguments = ["--headless", "--path", ".", "--export-release", target_platform, output_file]
-        System.cmd(editor_file, arguments, env: env)
+        arguments = ["--headless", "--path", pwd, "--export-release", target_platform, output_file, "-e"]
+        {_, 0} = System.cmd("bash", ["-c", "#{editor_file} #{Enum.join(arguments, " ")}"], stderr_to_stdout: true)
         IO.puts(Enum.join(arguments, " "))
 
         case target_platform do
             "windows" ->
-                System.cmd("strip", [output_file])
+                System.cmd("strip", [output_file], stderr_to_stdout: true)
                 pdb_file = "#{@extract_dir_extracted}/godot.#{target_platform}.template_release.double.#{from_arch}.llvm.pdb"
                 if File.exists?(pdb_file) do
                     File.cp!(pdb_file, "#{@extract_dir}/export_#{target_platform}_#{target_arch}/#{Path.basename(pdb_file)}")
