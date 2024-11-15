@@ -123,7 +123,6 @@ defmodule BuildScript do
             platforms = [
                 {"windows", "x86_64"},
                 {"linuxbsd", "x86_64"},
-                {"macos", "arm64"},
                 {"web", "wasm32"},
             ]
             for {target_platform, target_arch} <- platforms do
@@ -161,11 +160,11 @@ defmodule BuildScript do
 
         templatedir = case @os_family do
             {:win32, :nt} ->
-                "#{System.get_env("USERPROFILE")}/AppData/Roaming/Godot/export_templates/#{version}/"
+                Path.expand("#{System.get_env("USERPROFILE")}/AppData/Roaming/Godot/export_templates/#{version}/")
             {:unix, :darwin} ->
-                "#{System.get_env("HOME")}/Library/Application Support/Godot/export_templates/#{version}/"
+                Path.expand("#{System.get_env("HOME")}/Library/Application Support/Godot/export_templates/#{version}/")
             {:unix, _} ->
-                "#{System.get_env("HOME")}/.local/share/godot/export_templates/#{version}/"
+                Path.expand("#{System.get_env("HOME")}/.local/share/godot/export_templates/#{version}/")
         end
         File.mkdir_p!(templatedir)
 
@@ -173,7 +172,6 @@ defmodule BuildScript do
             "linuxbsd" -> "#{@extract_dir_extracted}/godot.linuxbsd.template_debug.double.#{target_arch}"
             "windows" -> "#{@extract_dir_extracted}/godot.windows.template_debug.double.#{target_arch}.llvm.exe"
             "web" -> "#{@extract_dir_extracted}/godot.web.template_debug.double.wasm32.dlink.zip"
-            "macos" -> "#{@extract_dir_extracted}/godot_macos_double.zip"
             "android" -> "#{@extract_dir_extracted}/android_debug.apk"
             _ -> raise "Unsupported platform: #{target_platform}"
         end
@@ -182,7 +180,6 @@ defmodule BuildScript do
             "linuxbsd" -> "#{@extract_dir_extracted}/godot.linuxbsd.template_release.double.#{target_arch}"
             "windows" -> "#{@extract_dir_extracted}/godot.windows.template_release.double.#{target_arch}.llvm.exe"
             "web" -> "#{@extract_dir_extracted}/godot.web.template_release.double.wasm32.dlink.zip"
-            "macos" -> "#{@extract_dir_extracted}/godot_macos_double.zip"
             "android" -> "#{@extract_dir_extracted}/android_release.apk"
             _ -> raise "Unsupported platform: #{target_platform}"
         end
@@ -194,13 +191,12 @@ defmodule BuildScript do
             "macos" -> "macos_debug_#{target_arch}"
             "android" -> "android_debug.apk"
             _ -> "#{target_platform}_debug_#{target_arch}"
-        end
+    end
 
         release_file_name = case target_platform do
             "linuxbsd" -> "linux_release.#{target_arch}"
             "windows" -> "windows_release_#{target_arch}.exe"
             "web" -> "web_dlink_nothreads_release.zip"
-            "macos" -> "macos_release_#{target_arch}"
             "android" -> "android_release.apk"
             _ -> "#{target_platform}_release_#{target_arch}"
         end
@@ -221,15 +217,15 @@ defmodule BuildScript do
         end
         File.chmod(editor_file, 0o755)
         pwd = Path.dirname(__ENV__.file)
-        arguments = ["--headless", "--path", pwd, "--import", "-e"]
-        System.cmd("bash", ["-c", "#{editor_file} #{Enum.join(arguments, " ")}"], stderr_to_stdout: true)
+        arguments = ["--headless", "--path", pwd, "--import"]
+        {output, _exit_code} = System.cmd("bash", ["-c", "#{editor_file} #{Enum.join(arguments, " ")}"])
+        IO.puts(output)
 
         output_file = "#{@extract_dir}/export_#{target_platform}_#{target_arch}/#{@project_name}"
         output_file = if target_platform == "windows", do: output_file <> ".exe", else: output_file
-
         arguments = ["--headless", "--path", pwd, "--export-release", target_platform, output_file, "-e"]
-        {_, 0} = System.cmd("bash", ["-c", "#{editor_file} #{Enum.join(arguments, " ")}"], stderr_to_stdout: true)
-        IO.puts(Enum.join(arguments, " "))
+        {output, _exit_code} = System.cmd("bash", ["-c", "#{editor_file} #{Enum.join(arguments, " ")}"])
+        IO.puts(output)
 
         case target_platform do
             "windows" ->
