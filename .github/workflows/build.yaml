@@ -54,18 +54,24 @@ jobs:
           echo "GIT_TAG=${GIT_TAG}" >> $GITHUB_OUTPUT
 
           echo "ITCH_IO_PUBLISH=${{ env.ITCH_IO_PUBLISH }}" >> $GITHUB_OUTPUT
+          
+      - name: Fetch docker action
+        id: fetch-action
+        run: |
+          git clone https://github.com/V-Sekai/v-sekai-game.git
 
       - name: Docker build project
         id: docker
-        uses: ./docker/build-project
+        uses: ./v-sekai-game/docker/build-project
         with:
           repo: ${{ github.repository }}
           nightly: ${{ steps.setenv.outputs.PRERELEASE }}
+          default_export: true
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: xr-grid
+          name: v-sekai-release
           path: ${{ github.workspace }}/releases
 
       - name: Set tag name
@@ -94,20 +100,20 @@ jobs:
         uses: actions/create-release@v1
         with:
           tag_name: ${{ needs.build.outputs.TAG_NAME }}
-          release_name: ${{ needs.build.outputs.TAG_NAME }} V-Sekai Game Release
+          release_name: ${{ needs.build.outputs.TAG_NAME }} V-Sekai Model Explorer Release
           draft: false
           prerelease: ${{ needs.build.outputs.PRERELEASE }}
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: xr-grid
-          name: xr-grid
+          path: v-sekai-release
+          name: v-sekai-release
 
       - name: Upload Release Asset
         run: |
           echo "Release Tag: ${{ needs.build.outputs.TAG_NAME }}."
-          cd xr-grid
+          cd v-sekai-release
           echo "Uploading to ${{ steps.create_release.outputs.upload_url }}"
           for file in *; do \
             echo "Uploading $file..."; \
@@ -127,22 +133,21 @@ jobs:
     # Publish only on v-sekai-game tag update
     if: needs.build.outputs.ITCH_IO_PUBLISH == 'true' && needs.build.outputs.TAG_PUSH == 'true'
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          sparse-checkout: |
-            ./docker/itch-io/
+      - name: Fetch docker itch action
+        id: fetch-itch-action
+        run: |
+          git clone https://github.com/V-Sekai/v-sekai-game.git
 
       - name: Download Artifacts
         uses: actions/download-artifact@v4
         with:
-          path: ${{ github.workspace }}/xr-grid
-          name: xr-grid
+          path: ${{ github.workspace }}/v-sekai-release
+          name: v-sekai-release
 
       - name: Docker Itch.io Publish
-        uses: ./docker/itch-io
+        uses: ./v-sekai-game/docker/itch-io
         with:
           api_key: ${{ secrets.ITCH_IO_API_KEY }}
-          filepath: xr-grid
+          filepath: v-sekai-release
           itchio_project: projectname
           release_version: ${{ needs.build.outputs.GIT_TAG }}
